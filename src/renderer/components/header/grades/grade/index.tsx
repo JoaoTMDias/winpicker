@@ -19,7 +19,7 @@ const Grade: React.FC<Props> = ({ compliant, level = 'AA' }) => {
   const tooltipId = useId('tooltip');
   const iconName = compliant ? 'CompletedSolid' : 'ErrorBadge';
   const accessibleDescription = `${
-    compliant ? 'Passes' : 'Does not pass'
+    compliant ? 'Passes' : 'Fails'
   } the ${level} level.`;
 
   return (

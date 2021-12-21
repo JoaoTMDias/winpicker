@@ -6,6 +6,7 @@
 }
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -13,11 +14,22 @@
   height: 3rem;
   padding: 0 1rem;
   border-radius: 0.125rem;
-  background-color: rgba(255, 255, 255, 0.125);
   gap: 1rem;
 
-  &:focus-within {
-    outline: 1px solid var(--color-foreground);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--color-foreground);
+    opacity: 0.1;
+  }
+
+  &:focus-within,
+  &:hover {
+    &::before {
+      opacity: 0.15;
+    }
   }
 }
 
@@ -30,17 +42,36 @@
 }
 
 .valueInput {
-  :global(.ms-TextField-fieldGroup) {
-    background-color: transparent;
-    border-color: transparent;
-  }
+  :global {
+    .ms-TextField-fieldGroup {
+      background-color: transparent;
+      border-color: transparent;
 
-  :global(input) {
-    color: var(--color-foreground);
-    font-family: var(--font-family);
-    font-size: 1.125rem;
-    letter-spacing: 0.1em;
-    font-feature-settings: 'rclt' off;
+      &::after {
+        border-color: transparent;
+      }
+    }
+
+    input {
+      color: var(--color-foreground);
+      font-family: var(--font-family);
+      font-size: 1.125rem;
+      letter-spacing: 0.1em;
+      font-feature-settings: 'rclt' off;
+    }
+  }
+}
+
+.valueInput:hover,
+.valueInput:global(.is-active) {
+  :global {
+    .ms-TextField-fieldGroup,
+    .ms-TextField-fieldGroup::after {
+      border-top-color: transparent;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: var(--color-foreground);
+    }
   }
 }
 
@@ -54,6 +85,13 @@
   align-items: center;
   background-color: var(--color-foreground);
   position: relative;
+  user-select: none;
+
+  &:focus-within,
+  &:hover {
+    box-shadow: 0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-foreground);
+  }
 
   &__icon {
     color: var(--color-background);

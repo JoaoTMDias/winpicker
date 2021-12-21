@@ -2,7 +2,8 @@ import { useId } from '@fluentui/react-hooks';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Label } from '@fluentui/react/lib/Label';
 import { TextField } from '@fluentui/react/lib/TextField';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { usePickerState } from 'renderer/containers/picker-state';
 import Preview from './preview';
 import styles from './styles.module.scss';
 
@@ -14,17 +15,13 @@ const options: IDropdownOption[] = [
 ];
 
 interface Props {
-  id: string;
+  id: 'foreground' | 'background';
   label: string;
 }
 
 const Colour: React.FC<Props> = ({ id, label }) => {
-  const [pickedColour, setPickerColour] = useState(
-    window
-      .getComputedStyle(document.documentElement)
-      .getPropertyValue(`--color-${id}`)
-      .trim()
-  );
+  const [state, dispatch] = usePickerState();
+
   const textFieldId = useId(id);
 
   const handleOnPickColor = useCallback(
@@ -32,11 +29,16 @@ const Colour: React.FC<Props> = ({ id, label }) => {
       const newColor = event.target.value;
 
       if (newColor) {
-        setPickerColour(event.target.value);
-        document.documentElement.style.setProperty(`--color-${id}`, newColor);
+        dispatch({
+          type: 'NEW_COLOUR',
+          payload: {
+            type: id,
+            value: newColor,
+          },
+        });
       }
     },
-    [setPickerColour, id]
+    [dispatch, id]
   );
 
   const handleOnChangeColourOnInput = useCallback(
@@ -47,12 +49,19 @@ const Colour: React.FC<Props> = ({ id, label }) => {
       event.preventDefault();
 
       if (newValue) {
-        setPickerColour(newValue);
-        document.documentElement.style.setProperty(`--color-${id}`, newValue);
+        dispatch({
+          type: 'NEW_COLOUR',
+          payload: {
+            type: id,
+            value: newValue,
+          },
+        });
       }
     },
-    [setPickerColour, id]
+    [dispatch, id]
   );
+
+  const pickedColour = state.values[id];
 
   return (
     <Label className={styles.label} htmlFor={textFieldId}>
