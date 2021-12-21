@@ -28,4 +28,12 @@
     color: var(--color-foreground);
     margin-top: 1.375rem;
   }
+
+  &__rating {
+    :global {
+      .ms-RatingStar-back {
+        color: var(--color-foreground);
+      }
+    }
+  }
 }
