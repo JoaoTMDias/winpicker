@@ -1,20 +1,23 @@
-import { DefaultButton } from '@fluentui/react';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import '../assets/styles/index.scss';
+import Header from './components/header';
+import PickerForm from './components/picker-form';
 
-const Hello = () => {
+initializeIcons();
+
+const WinPicker = () => {
   return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
+    <>
+      <h1 className="sr-only">Win Picker</h1>
+      <div className="layout__wrapper">
+        <Header />
+        <main>
+          <PickerForm />
+        </main>
+        <footer />
       </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <DefaultButton text="test" type="button" />
-        <input type="color" id="swatch" name="swatch" />
-      </div>
-    </div>
+    </>
   );
 };
 
@@ -22,7 +25,7 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" component={Hello} />
+        <Route path="/" component={WinPicker} />
       </Switch>
     </Router>
   );

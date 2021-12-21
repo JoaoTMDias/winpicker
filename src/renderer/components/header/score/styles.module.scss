@@ -1,0 +1,31 @@
+.score {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  &__letters {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 4.25rem;
+    line-height: 5.75rem;
+    color: var(--color-foreground);
+  }
+
+  &__ratio {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 2.5rem;
+    line-height: 1.3;
+    color: var(--color-foreground);
+    margin-top: 1.375rem;
+  }
+}
