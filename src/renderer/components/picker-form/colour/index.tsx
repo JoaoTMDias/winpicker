@@ -10,8 +10,7 @@ import styles from './styles.module.scss';
 const options: IDropdownOption[] = [
   { key: 'hex', text: 'Hex' },
   { key: 'rgb', text: 'RGB' },
-  { key: 'hsla', text: 'HSLA' },
-  { key: 'hsb', text: 'HSB' },
+  { key: 'hsl', text: 'HSL' },
 ];
 
 interface Props {
@@ -61,6 +60,25 @@ const Colour: React.FC<Props> = ({ id, label }) => {
     [dispatch, id]
   );
 
+  const handleOnChangeColourFormat = useCallback(
+    (
+      _: React.FormEvent<HTMLDivElement>,
+      option?: IDropdownOption,
+      __?: number
+    ) => {
+      if (option?.key) {
+        dispatch({
+          type: 'NEW_FORMAT',
+          payload: {
+            value: option.key.toString(),
+            type: id,
+          },
+        });
+      }
+    },
+    [dispatch, id]
+  );
+
   const pickedColour = state.values[id];
 
   return (
@@ -71,7 +89,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
           <Preview colour={pickedColour} onSelect={handleOnPickColor} />
           <TextField
             id={textFieldId}
-            value={pickedColour}
+            value={pickedColour.value}
             className={styles.valueInput}
             onChange={handleOnChangeColourOnInput}
           />
@@ -80,6 +98,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
           className={styles.dropdown}
           label="Pick Colour Format"
           defaultSelectedKey="hex"
+          onChange={handleOnChangeColourFormat}
           options={options}
         />
       </div>

@@ -1,12 +1,20 @@
 /* eslint-disable no-case-declarations */
+import CoffeeColors from 'coffee-colors';
 import { ratio, score } from 'get-contrast';
+import { parseToHsl, parseToRgb } from 'polished';
 import { createReducerContext } from 'react-use';
 import { setColorValueAsCSSVariable } from './helpers';
 
+type ColorFormat = 'hex' | 'rgb' | 'hsl';
+
+export type Color = {
+  value: string;
+  format: ColorFormat;
+};
 type Score = 'AA' | 'AA+' | 'AAA' | 'AAA+';
 type ColorValues = {
-  foreground: string;
-  background: string;
+  foreground: Color;
+  background: Color;
 };
 type NewColour = {
   value: string;
@@ -21,7 +29,7 @@ type PickerState = {
 
 type PickerStateAction =
   | {
-      type: 'NEW_COLOUR';
+      type: 'NEW_COLOUR' | 'NEW_FORMAT';
       payload: NewColour;
     }
   | {
@@ -36,12 +44,65 @@ type PickerStateAction =
       payload: number;
     };
 
-function setNewColour(state: PickerState, payload: NewColour): ColorValues {
-  setColorValueAsCSSVariable(payload.type, payload.value);
+function convertColourToFormat(
+  previousFormat: ColorFormat,
+  format: ColorFormat,
+  value: string
+) {
+  switch (format) {
+    case 'hex':
+      const newValue = new CoffeeColors(value);
+      if (previousFormat === 'rgb') {
+        return CoffeeColors.rgbToHex(newValue);
+      }
 
+      if (previousFormat === 'hsl') {
+        return CoffeeColors.rgbToHex(CoffeeColors.hslToRgb(newValue));
+      }
+
+      return value;
+
+    case 'hsl':
+      const newHSL = parseToHsl(value);
+
+      return `hsl(${newHSL.hue},${newHSL.saturation * 100}%,${
+        newHSL.lightness * 100
+      }%)`;
+
+    case 'rgb':
+      const newRGB = parseToRgb(value);
+      return `rgb(${newRGB.red}, ${newRGB.green}, ${newRGB.blue})`;
+
+    default:
+      return value;
+  }
+}
+
+function setNewColour(
+  state: PickerState,
+  type: 'NEW_COLOUR' | 'NEW_FORMAT',
+  payload: NewColour
+): ColorValues {
   const newValues = { ...state.values };
 
-  newValues[payload.type] = payload.value;
+  switch (type) {
+    case 'NEW_FORMAT':
+      const convertedColour = convertColourToFormat(
+        state.values[payload.type].format,
+        payload.value as ColorFormat,
+        newValues[payload.type].value
+      );
+      newValues[payload.type].value = convertedColour;
+      newValues[payload.type].format = payload.value as ColorFormat;
+      break;
+
+    default:
+    case 'NEW_COLOUR':
+      newValues[payload.type].value = payload.value;
+      break;
+  }
+
+  setColorValueAsCSSVariable(payload.type, newValues[payload.type].value);
 
   return newValues;
 }
@@ -56,11 +117,18 @@ function setNewScore(foreground: string, background: string): Score {
 
 function setNewColourState(
   state: PickerState,
+  type: 'NEW_COLOUR' | 'NEW_FORMAT',
   payload: NewColour
 ): PickerState {
-  const newValues = setNewColour(state, payload);
-  const newRatio = setNewRatio(newValues.foreground, newValues.background);
-  const newScore = setNewScore(newValues.foreground, newValues.background);
+  const newValues = setNewColour(state, type, payload);
+  const newRatio = setNewRatio(
+    newValues.foreground.value,
+    newValues.background.value
+  );
+  const newScore = setNewScore(
+    newValues.foreground.value,
+    newValues.background.value
+  );
 
   return {
     ...state,
@@ -71,16 +139,22 @@ function setNewColourState(
 }
 
 const INITIAL_COLOURS: ColorValues = {
-  foreground: '#ffffff',
-  background: '#000000',
+  foreground: {
+    value: '#ffffff',
+    format: 'hex',
+  },
+  background: {
+    value: '#000000',
+    format: 'hex',
+  },
 };
 const INITIAL_RATIO: number = setNewRatio(
-  INITIAL_COLOURS.foreground,
-  INITIAL_COLOURS.background
+  INITIAL_COLOURS.foreground.value,
+  INITIAL_COLOURS.background.value
 );
 const INITIAL_SCORE: Score = setNewScore(
-  INITIAL_COLOURS.foreground,
-  INITIAL_COLOURS.background
+  INITIAL_COLOURS.foreground.value,
+  INITIAL_COLOURS.background.value
 );
 const INITIAL_STATE: PickerState = {
   ratio: INITIAL_RATIO,
@@ -95,7 +169,8 @@ const reducer = (
 ): PickerState => {
   switch (action.type) {
     case 'NEW_COLOUR':
-      return setNewColourState(state, action.payload);
+    case 'NEW_FORMAT':
+      return setNewColourState(state, action.type, action.payload);
     default:
       return state;
   }

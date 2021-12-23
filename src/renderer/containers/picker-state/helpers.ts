@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 type ColorType = 'foreground' | 'background';
 
 const CSS_NAME_SCHEMA = '--color-';
