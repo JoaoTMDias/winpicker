@@ -1,27 +1,18 @@
-import { Rating, RatingSize } from '@fluentui/react';
-import { useId } from '@fluentui/react-hooks';
-import { ITooltipHostStyles, TooltipHost } from '@fluentui/react/lib/Tooltip';
-import React, { useMemo } from 'react';
-import { usePickerState } from 'renderer/containers/picker-state';
-import styles from './styles.module.scss';
+import { Rating, RatingSize } from "@fluentui/react";
+import React, { useMemo } from "react";
+import { Tooltip } from "renderer/components/common";
+import { usePickerState } from "renderer/containers/picker-state";
+import styles from "./styles.module.scss";
 
 interface Props {
   score: number;
 }
-
-const calloutProps = { gapSpace: 0 };
-// The TooltipHost root uses display: inline by default.
-// If that's causing sizing issues or tooltip positioning issues, try overriding to inline-block.
-const hostStyles: Partial<ITooltipHostStyles> = {
-  root: { display: 'inline-block' },
-};
 
 const DEFAULT_RATING_SCORE = 1;
 const MAX_RATING_SCORE = 5;
 
 const Score: React.FC<Props> = ({ score }) => {
   const [state] = usePickerState();
-  const tooltipId = useId('score');
   const description = `Contrast Ratio is ${score} to 1`;
 
   const rating = useMemo(() => {
@@ -48,14 +39,12 @@ const Score: React.FC<Props> = ({ score }) => {
 
   return (
     <div className={styles.score}>
-      <TooltipHost
-        content={description}
-        id={tooltipId}
-        calloutProps={calloutProps}
-        styles={hostStyles}
-      >
-        <div className={styles.score__container}>
-          <span className={styles.score__letters}>Aa</span>
+      <div className={styles.score__container}>
+        <span className={styles.score__letters}>Aa</span>
+        <Tooltip
+          id="a0123bde-0525-453e-aa62-b2a34d9ce8a0"
+          description={description}
+        >
           <h2
             className={styles.score__ratio}
             aria-live="polite"
@@ -65,8 +54,8 @@ const Score: React.FC<Props> = ({ score }) => {
             <span>{score}</span>
             <span className="sr-only">to 1</span>
           </h2>
-        </div>
-      </TooltipHost>
+        </Tooltip>
+      </div>
       <Rating
         className={styles.score__rating}
         max={MAX_RATING_SCORE}
@@ -76,6 +65,7 @@ const Score: React.FC<Props> = ({ score }) => {
         ariaLabel={ariaLabel}
         ariaLabelFormat="{0} of {1} stars"
         disabled
+        readOnly
       />
     </div>
   );

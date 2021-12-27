@@ -1,42 +1,28 @@
-import { useId } from '@fluentui/react-hooks';
-import { Icon } from '@fluentui/react/lib/Icon';
-import { ITooltipHostStyles, TooltipHost } from '@fluentui/react/lib/Tooltip';
-import styles from './styles.module.scss';
+import { Icon } from "@fluentui/react/lib/Icon";
+import { Tooltip } from "renderer/components/common";
+import styles from "./styles.module.scss";
 
 interface Props {
   compliant?: boolean;
-  level: 'AA' | 'AA+' | 'AAA' | 'AAA+';
+  level: "AA" | "AA+" | "AAA" | "AAA+";
 }
 
-const calloutProps = { gapSpace: 0 };
-// The TooltipHost root uses display: inline by default.
-// If that's causing sizing issues or tooltip positioning issues, try overriding to inline-block.
-const hostStyles: Partial<ITooltipHostStyles> = {
-  root: { display: 'inline-block' },
-};
-
-const Grade: React.FC<Props> = ({ compliant, level = 'AA' }) => {
-  const tooltipId = useId('tooltip');
-  const iconName = compliant ? 'CompletedSolid' : 'ErrorBadge';
+const Grade: React.FC<Props> = ({ compliant, level = "AA" }) => {
+  const tooltipId = `33816320-5c10-4d84-806d-206c0a9a0976-${level}`;
+  const iconName = compliant ? "CompletedSolid" : "ErrorBadge";
   const accessibleDescription = `${
-    compliant ? 'Passes' : 'Fails'
+    compliant ? "Passes" : "Fails"
   } the ${level} level.`;
 
   return (
-    <TooltipHost
-      content={accessibleDescription}
-      // This id is used on the tooltip itself, not the host
-      // (so an element with this id only exists when the tooltip is shown)
-      id={tooltipId}
-      calloutProps={calloutProps}
-      styles={hostStyles}
-    >
-      <li className={styles.grade} aria-describedby={tooltipId}>
+    <Tooltip id={tooltipId} description={accessibleDescription}>
+      <div className={styles.grade} role="listitem">
+        <span className="sr-only">{accessibleDescription}</span>
         {compliant}
         <Icon iconName={iconName} />
-        <span>{level}</span>
-      </li>
-    </TooltipHost>
+        <span aria-hidden>{level}</span>
+      </div>
+    </Tooltip>
   );
 };
 

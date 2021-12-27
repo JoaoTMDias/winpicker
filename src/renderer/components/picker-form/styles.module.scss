@@ -3,6 +3,18 @@
   margin-right: 0;
   margin-bottom: 5rem;
   margin-left: 0;
+  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .wrapper {
@@ -21,7 +33,68 @@
 .swap {
   background-color: transparent;
   color: var(--color-foreground);
-  border: none;
-  height: 3rem;
   transform: translateY(30px);
+  height: 3rem;
+}
+
+.cta {
+  justify-content: flex-end;
+  flex-shrink: 0;
+  flex-grow: 1;
+  width: auto;
+  transform: translateY(0.75rem);
+}
+
+.swap,
+.cta__button {
+  border: none;
+}
+
+.label {
+  color: var(--color-foreground);
+  gap: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cta__button {
+  position: relative;
+  color: var(--color-foreground);
+  transition: transform 100ms ease-in-out;
+  outline-color: var(--color-foreground);
+
+  &:hover,
+  &:focus {
+    transform: scale(0.9);
+    outline-width: 2px;
+    outline-style: solid;
+    outline-offset: 2px;
+  }
+
+  &--default {
+    background-color: transparent;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-foreground);
+      opacity: 0.15;
+    }
+  }
+
+  &--primary {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-foreground);
+      color: var(--color-background);
+    }
+  }
 }

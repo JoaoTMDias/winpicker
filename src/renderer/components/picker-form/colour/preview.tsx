@@ -1,7 +1,7 @@
-import { Icon } from '@fluentui/react/lib/Icon';
-import { FC } from 'react';
-import { Color } from '../../../containers/picker-state';
-import styles from './styles.module.scss';
+import { Icon } from "@fluentui/react/lib/Icon";
+import { FC } from "react";
+import { Color } from "../../../containers/picker-state";
+import styles from "./styles.module.scss";
 
 interface Props {
   colour: Color;

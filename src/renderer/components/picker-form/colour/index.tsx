@@ -1,26 +1,31 @@
-import { useId } from '@fluentui/react-hooks';
-import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
-import { Label } from '@fluentui/react/lib/Label';
-import { TextField } from '@fluentui/react/lib/TextField';
-import { useCallback } from 'react';
-import { usePickerState } from 'renderer/containers/picker-state';
-import Preview from './preview';
-import styles from './styles.module.scss';
+import { TooltipDelay } from "@fluentui/react";
+import { useId } from "@fluentui/react-hooks";
+import {
+  Dropdown,
+  IDropdownOption,
+  IDropdownStyles,
+} from "@fluentui/react/lib/Dropdown";
+import { Label } from "@fluentui/react/lib/Label";
+import { TextField } from "@fluentui/react/lib/TextField";
+import { useCallback } from "react";
+import { Tooltip } from "renderer/components/common";
+import { usePickerState } from "renderer/containers/picker-state";
+import Preview from "./preview";
+import styles from "./styles.module.scss";
 
 const options: IDropdownOption[] = [
-  { key: 'hex', text: 'Hex' },
-  { key: 'rgb', text: 'RGB' },
-  { key: 'hsl', text: 'HSL' },
+  { key: "hex", text: "Hex" },
+  { key: "rgb", text: "RGB" },
+  { key: "hsl", text: "HSL" },
 ];
 
 interface Props {
-  id: 'foreground' | 'background';
+  id: "foreground" | "background";
   label: string;
 }
 
 const Colour: React.FC<Props> = ({ id, label }) => {
   const [state, dispatch] = usePickerState();
-
   const textFieldId = useId(id);
 
   const handleOnPickColor = useCallback(
@@ -29,7 +34,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
 
       if (newColor) {
         dispatch({
-          type: 'NEW_COLOUR',
+          type: "NEW_COLOUR",
           payload: {
             type: id,
             value: newColor,
@@ -49,7 +54,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
 
       if (newValue) {
         dispatch({
-          type: 'NEW_COLOUR',
+          type: "NEW_COLOUR",
           payload: {
             type: id,
             value: newValue,
@@ -68,7 +73,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
     ) => {
       if (option?.key) {
         dispatch({
-          type: 'NEW_FORMAT',
+          type: "NEW_FORMAT",
           payload: {
             value: option.key.toString(),
             type: id,
@@ -80,13 +85,40 @@ const Colour: React.FC<Props> = ({ id, label }) => {
   );
 
   const pickedColour = state.values[id];
+  const tooltipProps = {
+    id: `a05383f4-3cc3-4788-9ca5-9340c754818d-${id}`,
+    description: `Choose a new ${label.toLowerCase()} colour`,
+  };
+  const dropdownProps = {
+    id: `96db919e-2fde-4267-94ff-24da2dac1b65-${id}`,
+    description: `Change the ${label.toLowerCase()} colour format`,
+    styles: {
+      dropdown: {
+        ":focus": {
+          ":after": {
+            border: "none",
+          },
+          ".ms-Dropdown-title, .ms-Dropdown-caretDown": {
+            color: "var(--color-foreground)",
+            borderColor: "currentColor",
+          },
+        },
+      },
+    } as Partial<IDropdownStyles>,
+  };
 
   return (
     <Label className={styles.label} htmlFor={textFieldId}>
       {label}
       <div className={styles.container}>
         <span className={styles.data}>
-          <Preview colour={pickedColour} onSelect={handleOnPickColor} />
+          <Tooltip
+            id={tooltipProps.id}
+            description={tooltipProps.description}
+            delay={TooltipDelay.long}
+          >
+            <Preview colour={pickedColour} onSelect={handleOnPickColor} />
+          </Tooltip>
           <TextField
             id={textFieldId}
             value={pickedColour.value}
@@ -94,13 +126,20 @@ const Colour: React.FC<Props> = ({ id, label }) => {
             onChange={handleOnChangeColourOnInput}
           />
         </span>
-        <Dropdown
-          className={styles.dropdown}
-          label="Pick Colour Format"
-          defaultSelectedKey="hex"
-          onChange={handleOnChangeColourFormat}
-          options={options}
-        />
+        <Tooltip
+          id={dropdownProps.id}
+          description={dropdownProps.description}
+          delay={TooltipDelay.long}
+        >
+          <Dropdown
+            className={styles.dropdown}
+            label="Pick Colour Format"
+            defaultSelectedKey="hex"
+            onChange={handleOnChangeColourFormat}
+            options={options}
+            styles={dropdownProps.styles}
+          />
+        </Tooltip>
       </div>
     </Label>
   );

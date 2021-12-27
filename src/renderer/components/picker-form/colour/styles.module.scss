@@ -28,7 +28,7 @@
   &:focus-within,
   &:hover {
     &::before {
-      opacity: 0.15;
+      opacity: 0.08;
     }
   }
 }
@@ -136,5 +136,19 @@
     .ms-Dropdown-caretDown {
       color: var(--color-foreground);
     }
+  }
+}
+
+.dropdown:focus,
+.dropdown:hover {
+  &::after {
+    border: 2px color var(--color-foreground);
+  }
+
+  :global(.ms-Dropdown-title),
+  :global(.ms-Dropdown-caretDown) {
+    color: var(--color-foreground);
+    border-color: currentColor;
+    outline-color: currentColor;
   }
 }

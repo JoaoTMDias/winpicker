@@ -1,0 +1,85 @@
+.swatches {
+  &__check {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 100ms ease-in-out;
+  }
+  &__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    min-height: 2rem;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  &__item,
+  &__button {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__button {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    clip-path: circle(50% at 50% 50%);
+    transition: transform 100ms ease-in-out;
+
+    &:hover,
+    &:focus {
+      &[aria-pressed='false'] {
+        transform: scale(0.8);
+      }
+    }
+  }
+
+  &__item {
+    &[data-selected='true'] {
+      .swatches__check {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    &__foreground,
+    &__background {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 2rem 2rem 0 0;
+      border-color: transparent;
+      border-top-color: var(--swatch-colour);
+      top: 0;
+      left: 0;
+    }
+
+    &__foreground {
+      --swatch-colour: var(--color-foreground);
+    }
+
+    &__background {
+      --swatch-colour: var(--color-background);
+      transform: rotate(0.5turn);
+    }
+  }
+}
