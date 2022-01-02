@@ -2,9 +2,9 @@ import { useId } from "@fluentui/react-hooks";
 import {
   ITooltipHostProps,
   ITooltipHostStyles,
-  TooltipHost,
+  TooltipHost
 } from "@fluentui/react/lib/Tooltip";
-import React from "react";
+import { FC } from "react";
 
 const calloutProps = { gapSpace: 0 };
 const hostStyles: Partial<ITooltipHostStyles> = {
@@ -16,7 +16,7 @@ interface Props extends ITooltipHostProps {
   description: string;
 }
 
-const Tooltip: React.FC<Props> = ({ id, description, delay, children }) => {
+const Tooltip: FC<Props> = ({ id, description, delay, children }) => {
   const tooltipId = useId(id);
 
   return (

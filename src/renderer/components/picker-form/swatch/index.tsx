@@ -1,7 +1,7 @@
 import { Icon } from "@fluentui/react";
-import React, { CSSProperties, useCallback } from "react";
-import { usePickerState } from "renderer/containers/picker-state";
-import { Color, ColorValues } from "renderer/containers/picker-state/types";
+import { CSSProperties, FC, useCallback } from "react";
+import { usePickerState } from "../../../containers/picker-state";
+import { Color, ColorValues } from "../../../containers/picker-state/types";
 import styles from "./styles.module.scss";
 
 interface SwatchProps {
@@ -10,7 +10,7 @@ interface SwatchProps {
   background: Color;
 }
 
-export const Swatch: React.FC<SwatchProps> = ({
+export const Swatch: FC<SwatchProps> = ({
   selected,
   foreground,
   background,
@@ -61,7 +61,7 @@ interface SwatchListProps {
   swatches: ColorValues[];
 }
 
-export const SwatchList: React.FC<SwatchListProps> = ({
+export const SwatchList: FC<SwatchListProps> = ({
   current,
   swatches,
 }) => {

@@ -1,13 +1,14 @@
 import { initializeIcons } from "@fluentui/font-icons-mdl2";
 import { DefaultButton, Icon } from "@fluentui/react";
-import { MemoryRouter as Router, Route, Switch } from "react-router-dom";
-import "../assets/styles/index.scss";
-import styles from "./App.module.scss";
-import Header from "./components/header";
-import PickerForm from "./components/picker-form";
-import { PickerStateProvider } from "./containers/picker-state";
+import { MemoryRouter as Router, Route, Routes } from "react-router-dom";
+import styles from "./app.module.scss";
+import "./assets/styles/index.scss";
+import Header from "./renderer/components/header";
+import PickerForm from "./renderer/components/picker-form";
+import { PickerStateProvider } from "./renderer/containers/picker-state";
 
 initializeIcons();
+
 const WinPicker = () => {
   return (
     <>
@@ -51,14 +52,14 @@ const WinPicker = () => {
       </PickerStateProvider>
     </>
   );
-};
+}
 
 export default function App() {
   return (
     <Router>
-      <Switch>
-        <Route path="/" component={WinPicker} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<WinPicker />} />
+      </Routes>
     </Router>
   );
 }

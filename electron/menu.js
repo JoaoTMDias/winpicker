@@ -1,13 +1,28 @@
-import { BrowserWindow, Menu, shell } from "electron";
+const { Menu, shell } = require("electron");
 
-export default class MenuBuilder {
-  mainWindow: BrowserWindow;
+/**
+ * @typedef {import("electron").BrowserWindow} IBrowserWindow
+ * @typedef {import("electron").Menu} IMenu
+ */
 
-  constructor(mainWindow: BrowserWindow) {
+class MenuBuilder {
+  /**
+   * @type {IBrowserWindow}
+   */
+  mainWindow;
+
+  /**
+   * @param {IBrowserWindow} mainWindow
+   */
+  constructor(mainWindow) {
     this.mainWindow = mainWindow;
   }
 
-  buildMenu(): Menu {
+  /**
+   *
+   * @returns {IMenu}
+   */
+  buildMenu() {
     if (
       process.env.NODE_ENV === "development" ||
       process.env.DEBUG_PROD === "true"
@@ -23,7 +38,10 @@ export default class MenuBuilder {
     return menu;
   }
 
-  setupDevelopmentEnvironment(): void {
+  /**
+   * @returns {void}
+   */
+  setupDevelopmentEnvironment() {
     this.mainWindow.webContents.on("context-menu", (_, props) => {
       const { x, y } = props;
 
@@ -124,3 +142,6 @@ export default class MenuBuilder {
     return templateDefault;
   }
 }
+
+
+module.exports = MenuBuilder;

@@ -3,13 +3,13 @@ import { useId } from "@fluentui/react-hooks";
 import {
   Dropdown,
   IDropdownOption,
-  IDropdownStyles,
+  IDropdownStyles
 } from "@fluentui/react/lib/Dropdown";
 import { Label } from "@fluentui/react/lib/Label";
 import { TextField } from "@fluentui/react/lib/TextField";
-import { useCallback } from "react";
-import { Tooltip } from "renderer/components/common";
-import { usePickerState } from "renderer/containers/picker-state";
+import { ChangeEvent, FC, FormEvent, useCallback } from "react";
+import { usePickerState } from "../../../containers/picker-state";
+import { Tooltip } from "../../common";
 import Preview from "./preview";
 import styles from "./styles.module.scss";
 
@@ -24,13 +24,13 @@ interface Props {
   label: string;
 }
 
-const Colour: React.FC<Props> = ({ id, label }) => {
+const Colour: FC<Props> = ({ id, label }) => {
   const [state, dispatch] = usePickerState();
   const textFieldId = useId(id);
 
   const handleOnPickColor = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newColor = event.target.value;
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const newColor = (event.target as HTMLInputElement).value;
 
       if (newColor) {
         dispatch({
@@ -47,7 +47,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
 
   const handleOnChangeColourOnInput = useCallback(
     (
-      event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+      event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
       newValue?: string
     ) => {
       event.preventDefault();
@@ -67,7 +67,7 @@ const Colour: React.FC<Props> = ({ id, label }) => {
 
   const handleOnChangeColourFormat = useCallback(
     (
-      _: React.FormEvent<HTMLDivElement>,
+      _: FormEvent<HTMLDivElement>,
       option?: IDropdownOption,
       __?: number
     ) => {

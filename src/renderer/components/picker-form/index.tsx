@@ -3,11 +3,11 @@ import {
   Icon,
   Label,
   PrimaryButton,
-  TooltipDelay,
+  TooltipDelay
 } from "@fluentui/react";
 import clsx from "clsx";
 import { useCallback } from "react";
-import { usePickerState } from "renderer/containers/picker-state";
+import { usePickerState } from "../../containers/picker-state";
 import { Tooltip } from "../common";
 import Colour from "./colour";
 import styles from "./styles.module.scss";

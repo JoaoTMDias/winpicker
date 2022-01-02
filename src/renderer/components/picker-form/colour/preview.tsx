@@ -1,11 +1,11 @@
 import { Icon } from "@fluentui/react/lib/Icon";
-import { FC } from "react";
-import { Color } from "../../../containers/picker-state";
+import { ChangeEvent, FC } from "react";
+import { Color } from "../../../containers/picker-state/types";
 import styles from "./styles.module.scss";
 
 interface Props {
   colour: Color;
-  onSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelect: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Preview: FC<Props> = ({ colour, onSelect }) => {

@@ -1,7 +1,7 @@
 import { Rating, RatingSize } from "@fluentui/react";
-import React, { useMemo } from "react";
-import { Tooltip } from "renderer/components/common";
-import { usePickerState } from "renderer/containers/picker-state";
+import { FC, useMemo } from "react";
+import { usePickerState } from "../../../containers/picker-state";
+import { Tooltip } from "../../common";
 import styles from "./styles.module.scss";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const DEFAULT_RATING_SCORE = 1;
 const MAX_RATING_SCORE = 5;
 
-const Score: React.FC<Props> = ({ score }) => {
+const Score: FC<Props> = ({ score }) => {
   const [state] = usePickerState();
   const description = `Contrast Ratio is ${score} to 1`;
 

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { usePickerState } from "renderer/containers/picker-state";
+import { usePickerState } from "../../containers/picker-state";
 import Grade from "./grades/grade";
 import Score from "./score";
 import styles from "./styles.module.scss";
