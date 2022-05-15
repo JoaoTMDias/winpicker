@@ -3,7 +3,7 @@ import { useId } from "@fluentui/react-hooks";
 import {
   Dropdown,
   IDropdownOption,
-  IDropdownStyles
+  IDropdownStyles,
 } from "@fluentui/react/lib/Dropdown";
 import { Label } from "@fluentui/react/lib/Label";
 import { TextField } from "@fluentui/react/lib/TextField";
@@ -29,18 +29,14 @@ const Colour: FC<Props> = ({ id, label }) => {
   const textFieldId = useId(id);
 
   const handleOnPickColor = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const newColor = (event.target as HTMLInputElement).value;
-
-      if (newColor) {
-        dispatch({
-          type: "NEW_COLOUR",
-          payload: {
-            type: id,
-            value: newColor,
-          },
-        });
-      }
+    (newColour: string) => {
+      dispatch({
+        type: "NEW_COLOUR",
+        payload: {
+          type: id,
+          value: newColour,
+        },
+      });
     },
     [dispatch, id]
   );
@@ -66,11 +62,7 @@ const Colour: FC<Props> = ({ id, label }) => {
   );
 
   const handleOnChangeColourFormat = useCallback(
-    (
-      _: FormEvent<HTMLDivElement>,
-      option?: IDropdownOption,
-      __?: number
-    ) => {
+    (_: FormEvent<HTMLDivElement>, option?: IDropdownOption, __?: number) => {
       if (option?.key) {
         dispatch({
           type: "NEW_FORMAT",

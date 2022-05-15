@@ -11,7 +11,7 @@ initializeIcons();
 
 const WinPicker = () => {
   return (
-    <>
+    <div id="winpicker">
       <h1 className="sr-only">Win Picker</h1>
       <PickerStateProvider>
         <div className="layout__wrapper">
@@ -50,9 +50,9 @@ const WinPicker = () => {
           </footer>
         </div>
       </PickerStateProvider>
-    </>
+    </div>
   );
-}
+};
 
 export default function App() {
   return (
