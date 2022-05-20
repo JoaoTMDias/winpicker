@@ -1,7 +1,7 @@
 {
   "name": "winpicker",
   "author": "joaotmdias",
-  "main": "electron/electron.js",
+  "main": "src/main/index.js",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
@@ -32,7 +32,7 @@
     "@vitejs/plugin-react": "^1.0.7",
     "concurrently": "^6.5.1",
     "cross-env": "^7.0.3",
-    "electron": "^16.0.5",
+    "electron": "^18.2.4",
     "electron-builder": "^22.14.5",
     "sass": "^1.45.2",
     "typescript": "^4.4.4",
@@ -42,7 +42,7 @@
   "build": {
     "appId": "me.joaodias.winpicker",
     "productName": "WinPicker",
-    "copyright": "Copyright © 2021 ${author}",
+    "copyright": "Copyright © 2022 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
     },
@@ -52,7 +52,7 @@
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
+      "src/main/**/*"
     ],
     "directories": {
       "buildResources": "assets",

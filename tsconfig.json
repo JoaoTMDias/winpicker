@@ -15,11 +15,12 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
-		"paths": {
-			"components/*": ["./src/renderer/components/*"],
-			"containers/*": ["./src/renderer/containers/*"],
-			"typings/*": ["./src/renderer/typings/*"]
-		},
+    "paths": {
+      "components/*": ["./src/renderer/components/*"],
+      "constants/*": ["./src/constants/*"],
+      "containers/*": ["./src/renderer/containers/*"],
+      "typings/*": ["./src/renderer/typings/*"]
+    }
   },
-  "include": ["./src"]
+  "include": ["./src", "./electron"]
 }

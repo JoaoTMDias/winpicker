@@ -7,7 +7,7 @@ import {
 } from "@fluentui/react/lib/Dropdown";
 import { Label } from "@fluentui/react/lib/Label";
 import { TextField } from "@fluentui/react/lib/TextField";
-import { ChangeEvent, FC, FormEvent, useCallback } from "react";
+import { FC, FormEvent, useCallback } from "react";
 import { usePickerState } from "../../../containers/picker-state";
 import { Tooltip } from "../../common";
 import Preview from "./preview";
@@ -109,7 +109,7 @@ const Colour: FC<Props> = ({ id, label }) => {
             description={tooltipProps.description}
             delay={TooltipDelay.long}
           >
-            <Preview colour={pickedColour} onSelect={handleOnPickColor} />
+            <Preview type={id} onSelect={handleOnPickColor} />
           </Tooltip>
           <TextField
             id={textFieldId}

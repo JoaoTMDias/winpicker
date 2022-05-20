@@ -1,78 +1,56 @@
 import { Icon } from "@fluentui/react/lib/Icon";
-import { ChangeEvent, FC, useRef } from "react";
-import { Color } from "../../../containers/picker-state/types";
+import { FC, useEffect } from "react";
 import styles from "./styles.module.scss";
+import { CustomWindow, Props } from "./types";
 
-interface Props {
-  colour: Color;
-  onSelect: (colour: string) => void;
-}
+declare let window: CustomWindow;
 
-interface ColorSelectionOptions {
-  signal?: AbortSignal;
-}
+const Preview: FC<Props> = ({ type, onSelect }) => {
+  useEffect(() => {
+    /**
+     * Handles the colour response event and calls the `onSelect` callback
+     *
+     * @param {Electron.IpcRendererEvent} _
+     * @param {string} colour
+     */
+    function handleColour(_: Electron.IpcRendererEvent, colour: string) {
+      onSelect(colour, type);
+    }
 
-interface ColorSelectionResult {
-  sRGBHex: string;
-}
+    window.ipcRenderer.on(`picker:response:${type}`, handleColour);
 
-declare global {
-  interface window extends Window {
-    EyeDropper: {
-      open: (options?: ColorSelectionOptions) => Promise<ColorSelectionResult>;
+    return () => {
+      window.ipcRenderer.removeListener(
+        `picker:response:${type}`,
+        handleColour
+      );
     };
-  }
-}
+  }, []);
 
-const Preview: FC<Props> = ({ colour, onSelect }) => {
-  const { current: supportsEyeDropper } = useRef("EyeDropper" in window);
-
-  async function handleOnSelectColourWithEyeDropper() {
+  /**
+   * When clicking on the button, requests the ipcMain thread (node)
+   * that executes the native colour picker
+   *
+   * @returns {Promise<void>}
+   */
+  async function handleOnClick() {
     try {
-      let dropper = new EyeDropper();
-
-      const result = await dropper.open();
-      const value = result.sRGBHex as string;
-
-      onSelect(value);
+      window.ipcRenderer.send("picker:request", type);
     } catch (error) {
       console.warn(error);
     }
   }
 
-  function handleOnSelectWithColorInput(event: ChangeEvent<HTMLInputElement>) {
-    const newColour = (event.target as HTMLInputElement).value;
-
-    onSelect(newColour);
-  }
-
-  function renderCallToAction() {
-    if (supportsEyeDropper) {
-      return (
-        <button
-          type="button"
-          className={styles.preview__input}
-          onClick={handleOnSelectColourWithEyeDropper}
-        >
-          Choose Colour
-        </button>
-      );
-    }
-
-    return (
-      <input
-        className={styles.preview__input}
-        type="color"
-        value={colour.value}
-        onChange={handleOnSelectWithColorInput}
-      />
-    );
-  }
-
   return (
     <span className={styles.preview}>
       <Icon iconName="BucketColor" className={styles.preview__icon} />
-      {renderCallToAction()}
+      <button
+        type="button"
+        className={styles.preview__input}
+        onClick={handleOnClick}
+      >
+        Choose Colour
+      </button>
     </span>
   );
 };
