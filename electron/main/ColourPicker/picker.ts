@@ -4,7 +4,7 @@ const childProcess = require("child_process");
 function runColorPicker() {
   return new Promise((resolve, reject) =>
     (0, childProcess.execFile)(
-      (0, path.join)(__dirname, "picker.exe"),
+      (0, path.join)(__dirname, "ColourPicker.exe"),
       (exception, stdout, s) => {
         if (exception) {
           return reject(exception);

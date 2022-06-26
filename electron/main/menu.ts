@@ -1,4 +1,4 @@
-const { Menu, shell } = require("electron");
+import { BrowserWindow, Menu, shell } from "electron";
 
 /**
  * @typedef {import("electron").BrowserWindow} IBrowserWindow
@@ -6,23 +6,13 @@ const { Menu, shell } = require("electron");
  */
 
 class MenuBuilder {
-  /**
-   * @type {IBrowserWindow}
-   */
-  mainWindow;
+  mainWindow: BrowserWindow;
 
-  /**
-   * @param {IBrowserWindow} mainWindow
-   */
-  constructor(mainWindow) {
+  constructor (mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
   }
 
-  /**
-   *
-   * @returns {IMenu}
-   */
-  buildMenu() {
+  buildMenu(): Menu {
     if (
       process.env.NODE_ENV === "development" ||
       process.env.DEBUG_PROD === "true"
@@ -38,10 +28,7 @@ class MenuBuilder {
     return menu;
   }
 
-  /**
-   * @returns {void}
-   */
-  setupDevelopmentEnvironment() {
+  setupDevelopmentEnvironment(): void {
     this.mainWindow.webContents.on("context-menu", (_, props) => {
       const { x, y } = props;
 
@@ -74,43 +61,43 @@ class MenuBuilder {
         label: "&View",
         submenu:
           process.env.NODE_ENV === "development" ||
-          process.env.DEBUG_PROD === "true"
+            process.env.DEBUG_PROD === "true"
             ? [
-                {
-                  label: "&Reload",
-                  accelerator: "Ctrl+R",
-                  click: () => {
-                    this.mainWindow.webContents.reload();
-                  },
+              {
+                label: "&Reload",
+                accelerator: "Ctrl+R",
+                click: () => {
+                  this.mainWindow.webContents.reload();
                 },
-                {
-                  label: "Toggle &Full Screen",
-                  accelerator: "F11",
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
-                  },
+              },
+              {
+                label: "Toggle &Full Screen",
+                accelerator: "F11",
+                click: () => {
+                  this.mainWindow.setFullScreen(
+                    !this.mainWindow.isFullScreen()
+                  );
                 },
-                {
-                  label: "Toggle &Developer Tools",
-                  accelerator: "Alt+Ctrl+I",
-                  click: () => {
-                    this.mainWindow.webContents.toggleDevTools();
-                  },
+              },
+              {
+                label: "Toggle &Developer Tools",
+                accelerator: "Alt+Ctrl+I",
+                click: () => {
+                  this.mainWindow.webContents.toggleDevTools();
                 },
-              ]
+              },
+            ]
             : [
-                {
-                  label: "Toggle &Full Screen",
-                  accelerator: "F11",
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
-                  },
+              {
+                label: "Toggle &Full Screen",
+                accelerator: "F11",
+                click: () => {
+                  this.mainWindow.setFullScreen(
+                    !this.mainWindow.isFullScreen()
+                  );
                 },
-              ],
+              },
+            ],
       },
       {
         label: "Help",
@@ -143,5 +130,4 @@ class MenuBuilder {
   }
 }
 
-
-module.exports = MenuBuilder;
+export default MenuBuilder;

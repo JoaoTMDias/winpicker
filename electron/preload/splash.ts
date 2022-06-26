@@ -1,5 +1,11 @@
-// electron/preload.js
+interface Window {
+  // Expose API through preload script
+  fs: typeof import('fs')
+  ipcRenderer: import('electron').IpcRenderer
+  removeLoading: () => void
+}
 window.ipcRenderer = require("electron").ipcRenderer;
+
 
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.

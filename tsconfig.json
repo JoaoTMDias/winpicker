@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "paths": {
+      "@/*": ["src/*"],
+      "styles/*": ["src/assets/styles/*"]
+    },
     "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -13,14 +18,9 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "components/*": ["./src/renderer/components/*"],
-      "constants/*": ["./src/constants/*"],
-      "containers/*": ["./src/renderer/containers/*"],
-      "typings/*": ["./src/renderer/typings/*"]
-    }
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": ["./src", "./electron"]
+  "include": ["src", "types.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
