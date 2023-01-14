@@ -1,31 +1,17 @@
 import { Icon } from "@fluentui/react/lib/Icon";
 import { FC, useEffect } from "react";
+import useEyeDropper from "use-eye-dropper";
 import styles from "./styles.module.scss";
-import { CustomWindow, Props } from "./types";
-
-declare let window: CustomWindow;
+import { Props } from "./types";
 
 const Preview: FC<Props> = ({ type, onSelect }) => {
+  const { open, close, isSupported } = useEyeDropper();
+
   useEffect(() => {
-    /**
-     * Handles the colour response event and calls the `onSelect` callback
-     *
-     * @param {Electron.IpcRendererEvent} _
-     * @param {string} colour
-     */
-    function handleColour(_: Electron.IpcRendererEvent, colour: string) {
-      onSelect(colour, type);
-    }
-
-    window.ipcRenderer.on(`picker:response:${type}`, handleColour);
-
     return () => {
-      window.ipcRenderer.removeListener(
-        `picker:response:${type}`,
-        handleColour
-      );
+      close();
     };
-  }, []);
+  });
 
   /**
    * When clicking on the button, requests the ipcMain thread (node)
@@ -35,20 +21,24 @@ const Preview: FC<Props> = ({ type, onSelect }) => {
    */
   async function handleOnClick() {
     try {
-      window.ipcRenderer.send("picker:request", type);
+      open().then((result) => {
+        onSelect(result.sRGBHex, type);
+      });
+
+      console.log("Click");
     } catch (error) {
       console.warn(error);
     }
   }
 
+  if (!isSupported) {
+    return null;
+  }
+
   return (
     <span className={styles.preview}>
       <Icon iconName="BucketColor" className={styles.preview__icon} />
-      <button
-        type="button"
-        className={styles.preview__input}
-        onClick={handleOnClick}
-      >
+      <button type="button" className={styles.preview__input} onClick={handleOnClick}>
         Choose Colour
       </button>
     </span>
