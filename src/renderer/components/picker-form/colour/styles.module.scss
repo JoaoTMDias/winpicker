@@ -3,6 +3,7 @@
   gap: 0.25rem;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .container {
@@ -17,7 +18,7 @@
   gap: 1rem;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -57,7 +58,7 @@
       font-family: var(--font-family);
       font-size: 1.125rem;
       letter-spacing: 0.1em;
-      font-feature-settings: 'rclt' off;
+      font-feature-settings: "rclt" off;
     }
   }
 }
