@@ -3,6 +3,7 @@ import { FC, useMemo } from "react";
 import { usePickerState } from "../../../containers/picker-state";
 import { Tooltip } from "../../common";
 import styles from "./styles.module.scss";
+import { getRatioAsString } from "../../../helpers";
 
 interface Props {
   score: number;
@@ -35,7 +36,8 @@ const Score: FC<Props> = ({ score }) => {
     }
   }, [state]);
 
-  const ariaLabel = `Colour combination has a rating of ${rating} out of ${MAX_RATING_SCORE} stars`;
+  const ratingLabel = `Colour combination has a rating of ${rating} out of ${MAX_RATING_SCORE} stars`;
+  const ratioLabel = getRatioAsString(score, 1);
 
   return (
     <div className={styles.score}>
@@ -49,10 +51,11 @@ const Score: FC<Props> = ({ score }) => {
             className={styles.score__ratio}
             aria-live="polite"
             aria-atomic="false"
+            data-testid="header-ratio"
           >
-            <span className="sr-only">Colour combination has a ratio of</span>
-            <span>{score}</span>
-            <span className="sr-only">to 1</span>
+            <span className="sr-only">{ratioLabel.pre}</span>
+            <span>&nbsp;{score}&nbsp;</span>
+            <span className="sr-only">{ratioLabel.post}</span>
           </h2>
         </Tooltip>
       </div>
@@ -62,7 +65,7 @@ const Score: FC<Props> = ({ score }) => {
         size={RatingSize.Large}
         rating={rating}
         defaultRating={DEFAULT_RATING_SCORE}
-        ariaLabel={ariaLabel}
+        ariaLabel={ratingLabel}
         ariaLabelFormat="{0} of {1} stars"
         disabled
         readOnly
