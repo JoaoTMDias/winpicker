@@ -59,17 +59,25 @@ const Score: FC<Props> = ({ score }) => {
           </h2>
         </Tooltip>
       </div>
-      <Rating
-        className={styles.score__rating}
-        max={MAX_RATING_SCORE}
-        size={RatingSize.Large}
-        rating={rating}
-        defaultRating={DEFAULT_RATING_SCORE}
-        ariaLabel={ratingLabel}
-        ariaLabelFormat="{0} of {1} stars"
-        disabled
-        readOnly
-      />
+      <Tooltip
+        id="769c99ec-5f77-4ce8-b613-45690d1ae9a5"
+        description={ratingLabel}
+      >
+        <Rating
+          className={styles.score__rating}
+          max={MAX_RATING_SCORE}
+          size={RatingSize.Large}
+          rating={rating}
+          defaultRating={DEFAULT_RATING_SCORE}
+          ariaLabel={ratingLabel}
+          ariaLabelFormat="{0} of {1} stars"
+          disabled
+          readOnly
+          getAriaLabel={(rating: number, max: number) =>
+            `Colour combination has a rating of ${rating} out of ${max} stars`
+          }
+        />
+      </Tooltip>
     </div>
   );
 };
