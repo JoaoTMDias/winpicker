@@ -5,9 +5,30 @@
     <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WinPicker</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        background: var(--color-background, #000000);
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        font-weight: 400;
+        color: var(--color-foreground, #ffffff);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
