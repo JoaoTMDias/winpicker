@@ -3,7 +3,7 @@ import {
   Icon,
   Label,
   PrimaryButton,
-  TooltipDelay
+  TooltipDelay,
 } from "@fluentui/react";
 import clsx from "clsx";
 import { useCallback } from "react";
@@ -58,6 +58,7 @@ const PickerForm = () => {
             type="button"
             className={styles.swap}
             onClick={handleOnClickToSwap}
+            data-testid="swap-button"
           >
             <span className="sr-only">{swapButtonDescription}</span>
             <Icon iconName="Switch" />

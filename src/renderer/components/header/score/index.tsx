@@ -42,7 +42,9 @@ const Score: FC<Props> = ({ score }) => {
   return (
     <div className={styles.score}>
       <div className={styles.score__container}>
-        <span className={styles.score__letters}>Aa</span>
+        <span className={styles.score__letters} data-testid="header-logo">
+          Aa
+        </span>
         <Tooltip
           id="a0123bde-0525-453e-aa62-b2a34d9ce8a0"
           description={description}
@@ -59,25 +61,27 @@ const Score: FC<Props> = ({ score }) => {
           </h2>
         </Tooltip>
       </div>
-      <Tooltip
-        id="769c99ec-5f77-4ce8-b613-45690d1ae9a5"
-        description={ratingLabel}
-      >
-        <Rating
-          className={styles.score__rating}
-          max={MAX_RATING_SCORE}
-          size={RatingSize.Large}
-          rating={rating}
-          defaultRating={DEFAULT_RATING_SCORE}
-          ariaLabel={ratingLabel}
-          ariaLabelFormat="{0} of {1} stars"
-          disabled
-          readOnly
-          getAriaLabel={(rating: number, max: number) =>
-            `Colour combination has a rating of ${rating} out of ${max} stars`
-          }
-        />
-      </Tooltip>
+      <div data-testid="header-rating">
+        <Tooltip
+          id="769c99ec-5f77-4ce8-b613-45690d1ae9a5"
+          description={ratingLabel}
+        >
+          <Rating
+            className={styles.score__rating}
+            max={MAX_RATING_SCORE}
+            size={RatingSize.Large}
+            rating={rating}
+            defaultRating={DEFAULT_RATING_SCORE}
+            ariaLabel={ratingLabel}
+            ariaLabelFormat="{0} of {1} stars"
+            disabled
+            readOnly
+            getAriaLabel={(rating: number, max: number) => {
+              return `Colours rating: ${rating} out of ${max} stars`;
+            }}
+          />
+        </Tooltip>
+      </div>
     </div>
   );
 };
