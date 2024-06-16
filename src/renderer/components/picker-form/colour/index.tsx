@@ -1,4 +1,4 @@
-import { TooltipDelay } from "@fluentui/react";
+import { Callout, Link, Text, TooltipDelay } from "@fluentui/react";
 import { useId } from "@fluentui/react-hooks";
 import {
   Dropdown,
@@ -12,6 +12,7 @@ import { usePickerState } from "../../../containers/picker-state";
 import { Tooltip } from "../../common";
 import Preview from "./preview";
 import styles from "./styles.module.scss";
+import { useBoolean } from "react-use";
 
 const options: IDropdownOption[] = [
   { key: "hex", text: "Hex" },
@@ -25,8 +26,11 @@ interface Props {
 }
 
 const Colour: FC<Props> = ({ id, label }) => {
+  const [isCalloutVisible, toggleIsCalloutVisible] = useBoolean(false);
   const [state, dispatch] = usePickerState();
-  const textFieldId = useId(id);
+  const TEXTFIELD_ID = useId(id);
+  const GENERATED_ID = useId();
+  const BUTTON_ID = `${GENERATED_ID}--${id}`;
 
   const handleOnPickColor = useCallback(
     (newColour: string) => {
@@ -76,7 +80,7 @@ const Colour: FC<Props> = ({ id, label }) => {
     [dispatch, id]
   );
 
-  const pickedColour = state.values[id];
+  const { value } = state.values[id];
   const tooltipProps = {
     id: `a05383f4-3cc3-4788-9ca5-9340c754818d-${id}`,
     description: `Choose a new ${label.toLowerCase()} colour`,
@@ -99,25 +103,49 @@ const Colour: FC<Props> = ({ id, label }) => {
     } as Partial<IDropdownStyles>,
   };
 
+  const BUTTON_TEXT = `Current ${id} colour is `;
+
   return (
-    <Label className={styles.label} htmlFor={textFieldId}>
+    <Label className={styles.label} htmlFor={BUTTON_ID}>
       {label}
       <div className={styles.container}>
-        <span className={styles.data}>
-          <Tooltip
-            id={tooltipProps.id}
-            description={tooltipProps.description}
-            delay={TooltipDelay.long}
-          >
-            <Preview type={id} onSelect={handleOnPickColor} />
-          </Tooltip>
-          <TextField
-            id={textFieldId}
-            value={pickedColour.value}
-            className={styles.valueInput}
-            onChange={handleOnChangeColourOnInput}
-          />
-        </span>
+        <div className={styles.data}>
+          <button type="button" id={BUTTON_ID} onClick={toggleIsCalloutVisible}>
+            <span className="sr-only">{BUTTON_TEXT}</span>
+            {value}
+          </button>
+          {isCalloutVisible ? (
+            <Callout
+              className={styles.callout}
+              role="dialog"
+              gapSpace={8}
+              target={`#${BUTTON_ID}`}
+              onDismiss={toggleIsCalloutVisible}
+              setInitialFocus
+            >
+              <Text as="h1" block variant="xLarge" className={styles.title}>
+                Callout title here
+              </Text>
+              <Text block variant="small">
+                Message body is optional. If help documentation is available,
+                consider adding a link to learn more at the bottom.
+              </Text>
+              <Tooltip
+                id={tooltipProps.id}
+                description={tooltipProps.description}
+                delay={TooltipDelay.long}
+              >
+                <Preview type={id} onSelect={handleOnPickColor} />
+              </Tooltip>
+              <TextField
+                id={TEXTFIELD_ID}
+                value={value}
+                className={styles.valueInput}
+                onChange={handleOnChangeColourOnInput}
+              />
+            </Callout>
+          ) : null}
+        </div>
         <Tooltip
           id={dropdownProps.id}
           description={dropdownProps.description}

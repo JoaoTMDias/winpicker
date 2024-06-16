@@ -153,3 +153,14 @@
     outline-color: currentColor;
   }
 }
+
+.callout {
+  padding: 2rem;
+
+  [role="dialog"] {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+}
