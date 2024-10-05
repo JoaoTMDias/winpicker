@@ -96,9 +96,11 @@ test.describe("winpicker", async () => {
 
   test.describe("Picking a foreground colour", () => {
     test.beforeEach(async () => {
-      await expect(ELEMENTS.COLOR_INPUTS.FOREGROUND.PICKER).toBeVisible();
-      await ELEMENTS.COLOR_INPUTS.FOREGROUND.PICKER.click();
-      await expect(ELEMENTS.COLOR_INPUTS.CALLOUT.DIALOG).toBeVisible();
+      await test.step("Opening the Callout Picker", async () => {
+        await expect(ELEMENTS.COLOR_INPUTS.FOREGROUND.PICKER).toBeVisible();
+        await ELEMENTS.COLOR_INPUTS.FOREGROUND.PICKER.click();
+        await expect(ELEMENTS.COLOR_INPUTS.CALLOUT.DIALOG).toBeVisible();
+      });
     });
 
     test("Using the browser's EyeDropper API", async ({ page }) => {});
