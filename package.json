@@ -13,6 +13,7 @@
     "test:run": "playwright test"
   },
   "dependencies": {
+    "@feedzai/js-utilities": "^1.4.2",
     "@fluentui/react": "^8.118.8",
     "@tauri-apps/api": "^1.5.6",
     "clsx": "^2.1.1",

@@ -1,0 +1,42 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 90vw;
+
+  @media all and (min-width: 40rem) {
+    max-width: 70vw;
+  }
+
+  @media all and (min-width: 60rem) {
+    max-width: 50vw;
+  }
+}
+
+.title,
+.subtitle,
+.term {
+  color: var(--color-foreground);
+}
+
+.title {
+  font-size: clamp(1.75rem, 3vh, 2.25rem);
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: clamp(1.25rem, 2vh, 2rem);
+  font-weight: 600;
+}
+
+.term {
+  margin-bottom: 1rem;
+}
+
+.term dt {
+  font-weight: 600;
+  font-size: 1.25rem;
+}

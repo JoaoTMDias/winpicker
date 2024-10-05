@@ -1,15 +1,15 @@
 export type ColorSelectionOptions = {
-  signal?: AbortSignal
-}
+  signal?: AbortSignal;
+};
 
 export type ColorSelectionResult = {
-  sRGBHex: string
-}
+  sRGBHex: string;
+};
 
 interface EyeDropperAPI {
-  close: () => void
-  open: (options?: ColorSelectionOptions) => Promise<ColorSelectionResult>
-  isSupported: () => boolean
+  close: () => void;
+  open: (options?: ColorSelectionOptions) => Promise<ColorSelectionResult>;
+  isSupported: () => boolean;
 }
 
 declare global {
@@ -22,4 +22,12 @@ export type SelectType = "foreground" | "background";
 export interface Props {
   type: SelectType;
   onSelect: (colour: string, type: SelectType) => void;
+}
+
+export interface ColourPickerDialogProps {
+  open?: boolean;
+  target: string;
+  onDismiss: VoidFunction;
+  id: "foreground" | "background";
+  label: string;
 }

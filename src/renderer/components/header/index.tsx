@@ -4,35 +4,60 @@ import Grade from "./grades/grade";
 import Score from "./score";
 import styles from "./styles.module.scss";
 
-const Header = () => {
+function Header() {
   const [state] = usePickerState();
   const compliance = useMemo(() => {
-    const contrast = state.ratio;
+    const { ratio } = state;
 
-    if (contrast > 7) {
-      return { "AA+": true, AA: true, "AAA+": true, AAA: true };
-    }
-    if (contrast > 4.5) {
-      return { "AA+": true, AA: true, "AAA+": true, AAA: false };
-    }
-    if (contrast > 3) {
-      return { "AA+": true, AA: false, "AAA+": false, AAA: false };
-    }
+    switch (true) {
+      case ratio > 7:
+        return { "AA+": true, AA: true, "AAA+": true, AAA: true };
 
-    return { "AA+": false, AA: false, "AAA+": false, AAA: false };
+      case ratio > 4.5:
+        return { "AA+": true, AA: true, "AAA+": true, AAA: false };
+
+      case ratio > 3:
+        return { "AA+": true, AA: false, "AAA+": false, AAA: false };
+
+      default:
+        return { "AA+": false, AA: false, "AAA+": false, AAA: false };
+    }
   }, [state]);
 
   return (
     <header className={styles.wrapper} aria-label="Score and Grade results">
       <Score score={state.ratio} />
-      <div className={styles.grades} aria-label="Grade results" role="list">
-        <Grade compliant={compliance.AA} level="AA" />
-        <Grade compliant={compliance["AA+"]} level="AA+" />
-        <Grade compliant={compliance.AAA} level="AAA" />
-        <Grade compliant={compliance["AAA+"]} level="AAA+" />
+      <h2 className="sr-only" data-testid="header-grade-results-title">
+        Grade Results
+      </h2>
+      <div
+        className={styles.grades}
+        role="list"
+        data-testid="header-grade-results-list"
+      >
+        <Grade
+          compliant={compliance.AA}
+          level="AA"
+          data-testid="header-grade-results-item-aa"
+        />
+        <Grade
+          compliant={compliance["AA+"]}
+          level="AA+"
+          data-testid="header-grade-results-item-aa-plus"
+        />
+        <Grade
+          compliant={compliance.AAA}
+          level="AAA"
+          data-testid="header-grade-results-item-aaa"
+        />
+        <Grade
+          compliant={compliance["AAA+"]}
+          level="AAA+"
+          data-testid="header-grade-results-item-aaa-plus"
+        />
       </div>
     </header>
   );
-};
+}
 
 export default Header;

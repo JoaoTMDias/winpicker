@@ -46,24 +46,28 @@ const PickerForm = () => {
 
   return (
     <form className={styles.form}>
+      <h2 className="sr-only">Foreground, Background and Saved Swatches</h2>
       <fieldset className={styles.wrapper}>
-        <legend className="sr-only">Foreground and Background Colours</legend>
+        <legend className="sr-only" data-testid="color-inputs-fieldset">
+          Foreground and Background Colours
+        </legend>
         <Colour id="foreground" label="Foreground" />
-        <Tooltip
-          id="5da1ce23-2dc9-450c-a213-abccfc08ecb9"
-          description={swapButtonDescription}
-          delay={TooltipDelay.long}
+        <DefaultButton
+          type="button"
+          className={styles.swap}
+          onClick={handleOnClickToSwap}
+          data-testid="color-inputs-swap-button"
         >
-          <DefaultButton
-            type="button"
-            className={styles.swap}
-            onClick={handleOnClickToSwap}
-            data-testid="swap-button"
+          <Tooltip
+            id="5da1ce23-2dc9-450c-a213-abccfc08ecb9"
+            className={styles.swap__wrapper}
+            description={swapButtonDescription}
+            delay={TooltipDelay.long}
           >
             <span className="sr-only">{swapButtonDescription}</span>
             <Icon iconName="Switch" />
-          </DefaultButton>
-        </Tooltip>
+          </Tooltip>
+        </DefaultButton>
         <Colour id="background" label="Background" />
       </fieldset>
       <div className={styles.form__footer}>

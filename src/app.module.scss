@@ -1,10 +1,14 @@
 .footer {
   width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
+
+  @media (min-width: 40rem) {
+    flex-direction: row;
+  }
 
   &__button {
     position: relative;
@@ -17,7 +21,7 @@
     }
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

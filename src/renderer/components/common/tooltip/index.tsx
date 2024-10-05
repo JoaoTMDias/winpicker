@@ -2,12 +2,12 @@ import { useId } from "@fluentui/react-hooks";
 import {
   ITooltipHostProps,
   ITooltipHostStyles,
-  TooltipHost
+  TooltipHost,
 } from "@fluentui/react/lib/Tooltip";
 import { FC } from "react";
 
-const calloutProps = { gapSpace: 0 };
-const hostStyles: Partial<ITooltipHostStyles> = {
+const CALLOUT_PROPS = { gapSpace: 0 };
+const HOST_STYLES: Partial<ITooltipHostStyles> = {
   root: { display: "inline-block" },
 };
 
@@ -23,8 +23,8 @@ const Tooltip: FC<Props> = ({ id, description, delay, children }) => {
     <TooltipHost
       content={description}
       id={tooltipId}
-      calloutProps={calloutProps}
-      styles={hostStyles}
+      calloutProps={CALLOUT_PROPS}
+      styles={HOST_STYLES}
       delay={delay}
     >
       {children}

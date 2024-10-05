@@ -19,22 +19,36 @@
 
 .wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   width: 100%;
   margin: 0;
   padding: 0;
   border: none;
   position: relative;
+
+  @media (min-width: 47.75rem) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 }
 
 .swap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   background-color: transparent;
   color: var(--color-foreground);
-  transform: translateY(30px);
   height: 3rem;
+  width: 100%;
+
+  @media (min-width: 40rem) {
+    transform: translateY(30px);
+    width: fit-content;
+  }
 }
 
 .cta {

@@ -3,8 +3,9 @@ import { FC, useEffect } from "react";
 import useEyeDropper from "use-eye-dropper";
 import styles from "./styles.module.scss";
 import { Props } from "./types";
+import { DefaultButton } from "@fluentui/react";
 
-const Preview: FC<Props> = ({ type, onSelect }) => {
+const ScreenPicker: FC<Props> = ({ type, onSelect }) => {
   const { open, close, isSupported } = useEyeDropper();
 
   useEffect(() => {
@@ -36,13 +37,15 @@ const Preview: FC<Props> = ({ type, onSelect }) => {
   }
 
   return (
-    <span className={styles.preview}>
+    <DefaultButton
+      type="button"
+      className={styles.preview}
+      onClick={handleOnClick}
+    >
       <Icon iconName="BucketColor" className={styles.preview__icon} />
-      <button type="button" className={styles.preview__input} onClick={handleOnClick}>
-        Choose Colour
-      </button>
-    </span>
+      <span>Choose screen colour</span>
+    </DefaultButton>
   );
 };
 
-export default Preview;
+export default ScreenPicker;

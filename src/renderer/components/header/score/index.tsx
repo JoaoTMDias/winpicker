@@ -9,7 +9,6 @@ interface Props {
   score: number;
 }
 
-const DEFAULT_RATING_SCORE = 1;
 const MAX_RATING_SCORE = 5;
 
 const Score: FC<Props> = ({ score }) => {
@@ -34,10 +33,10 @@ const Score: FC<Props> = ({ score }) => {
       case state.ratio >= 1:
         return 1;
     }
-  }, [state]);
+  }, [state.ratio]);
 
-  const ratingLabel = `Colour combination has a rating of ${rating} out of ${MAX_RATING_SCORE} stars`;
-  const ratioLabel = getRatioAsString(score, 1);
+  const RATING_LABEL = `Colour combination has a rating of ${rating} out of ${MAX_RATING_SCORE} stars`;
+  const RATIO_LABEL = getRatioAsString(score, 1);
 
   return (
     <div className={styles.score}>
@@ -55,29 +54,28 @@ const Score: FC<Props> = ({ score }) => {
             aria-atomic="false"
             data-testid="header-ratio"
           >
-            <span className="sr-only">{ratioLabel.pre}</span>
+            <span className="sr-only">{RATIO_LABEL.pre}</span>
             <span>&nbsp;{score}&nbsp;</span>
-            <span className="sr-only">{ratioLabel.post}</span>
+            <span className="sr-only">{RATIO_LABEL.post}</span>
           </h2>
         </Tooltip>
       </div>
       <div data-testid="header-rating">
         <Tooltip
           id="769c99ec-5f77-4ce8-b613-45690d1ae9a5"
-          description={ratingLabel}
+          description={RATING_LABEL}
         >
           <Rating
             className={styles.score__rating}
             max={MAX_RATING_SCORE}
             size={RatingSize.Large}
             rating={rating}
-            defaultRating={DEFAULT_RATING_SCORE}
-            ariaLabel={ratingLabel}
+            ariaLabel={RATING_LABEL}
             ariaLabelFormat="{0} of {1} stars"
             disabled
             readOnly
             getAriaLabel={(rating: number, max: number) => {
-              return `Colours rating: ${rating} out of ${max} stars`;
+              return `${rating} out of ${max} stars`;
             }}
           />
         </Tooltip>
