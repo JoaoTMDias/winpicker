@@ -1,10 +1,10 @@
-import { useId } from "@fluentui/react-hooks";
+import { useAutoId } from "@feedzai/js-utilities/hooks";
 import { Label } from "@fluentui/react/lib/Label";
-import { FC, useCallback, useMemo } from "react";
-import { usePickerState } from "../../../containers/picker-state";
-import styles from "./styles.module.scss";
+import { FC, useMemo } from "react";
+import { usePicker } from "@/renderer/containers";
 import { useBoolean } from "react-use";
-import { ColourPickerDialog } from "./ColourPickerDialog";
+import { ColourPickerDialog } from "@/renderer/components";
+import styles from "./styles.module.scss";
 
 interface Props {
   id: "foreground" | "background";
@@ -13,9 +13,9 @@ interface Props {
 
 const Colour: FC<Props> = ({ id, label }) => {
   const [isCalloutVisible, toggleIsCalloutVisible] = useBoolean(false);
-  const [state, dispatch] = usePickerState();
-  const GENERATED_ID = useId();
-  const BUTTON_ID = `${GENERATED_ID}--${id}`;
+  const { values, createNewColour } = usePicker();
+  const GENERATED_ID = useAutoId();
+  const BUTTON_ID = `${CSS.escape(GENERATED_ID!)}--${id}`;
 
   const TEST_IDS = useMemo(() => {
     const label = `color-inputs-${id}-label`;
@@ -27,20 +27,7 @@ const Colour: FC<Props> = ({ id, label }) => {
     };
   }, [id]);
 
-  const handleOnPickColor = useCallback(
-    (newColour: string) => {
-      dispatch({
-        type: "NEW_COLOUR",
-        payload: {
-          type: id,
-          value: newColour,
-        },
-      });
-    },
-    [dispatch, id]
-  );
-
-  const { value } = state.values[id];
+  const { value } = values[id];
 
   const BUTTON_TEXT = `Current ${id} colour is `;
 

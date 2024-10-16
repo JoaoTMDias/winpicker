@@ -79,12 +79,15 @@
   transition: transform 100ms ease-in-out;
   outline-color: var(--color-foreground);
 
-  &:hover,
+  &:active,
   &:focus {
-    transform: scale(0.9);
     outline-width: 2px;
     outline-style: solid;
     outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.9);
   }
 
   &--default {

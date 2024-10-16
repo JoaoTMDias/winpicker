@@ -1,20 +1,21 @@
-import { ColourPickerDialogProps } from "./types";
+import { ColourPickerDialogProps } from "@/renderer/components/picker-form/colour/types";
 import {
   Callout,
   ColorPicker,
   DefaultButton,
   FocusTrapZone,
   IColor,
-  Icon,
   IconButton,
   PrimaryButton,
   Text,
   getColorFromString,
 } from "@fluentui/react";
-import ScreenPicker from "./screen-picker";
+import { ScreenPicker } from "@/renderer/components";
 import styles from "./styles.module.scss";
-import { FormEvent, useCallback, useRef } from "react";
-import { usePickerState } from "../../../containers/picker-state";
+import { useCallback, useRef } from "react";
+import { Tooltip } from "../common";
+import { usePicker } from "@/renderer/containers";
+import { useLockBodyScroll } from "react-use";
 
 const callout = `colour-picker-dialog`;
 
@@ -25,7 +26,9 @@ export function ColourPickerDialog({
   id,
   label,
 }: ColourPickerDialogProps) {
-  const [state, dispatch] = usePickerState();
+  useLockBodyScroll(open);
+
+  const { values, createNewColour, resetState } = usePicker();
   const TOOLTIP_PROPS = {
     id: `a05383f4-3cc3-4788-9ca5-9340c754818d-${id}`,
     title: `${label} colour`,
@@ -40,50 +43,33 @@ export function ColourPickerDialog({
 
   const handleOnPickColorFromSystem = useCallback(
     (newColour: string) => {
-      dispatch({
-        type: "NEW_COLOUR",
-        payload: {
-          type: id,
-          value: newColour,
-        },
+      createNewColour({
+        type: id,
+        value: newColour,
       });
     },
-    [dispatch, id]
+    [id]
+  );
+
+  const handleOnClickOnReset = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event.preventDefault();
+
+      resetState();
+    },
+    []
   );
 
   const handleOnPickColor = useCallback(
     (_: React.SyntheticEvent<HTMLElement, Event>, color: IColor) => {
       const NEW_COLOUR = color.str;
 
-      dispatch({
-        type: "NEW_COLOUR",
-        payload: {
-          type: id,
-          value: NEW_COLOUR,
-        },
+      createNewColour({
+        type: id,
+        value: NEW_COLOUR,
       });
     },
-    [dispatch, id]
-  );
-
-  const handleOnChangeColourOnInput = useCallback(
-    (
-      event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-      newValue?: string
-    ) => {
-      event.preventDefault();
-
-      if (newValue) {
-        dispatch({
-          type: "NEW_COLOUR",
-          payload: {
-            type: id,
-            value: newValue,
-          },
-        });
-      }
-    },
-    [dispatch, id]
+    [id]
   );
 
   if (!open) {
@@ -91,8 +77,7 @@ export function ColourPickerDialog({
   }
 
   const CURRENT_COLOUR =
-    getColorFromString(state.values.foreground.value) ??
-    state.values.foreground.value;
+    getColorFromString(values.foreground.value) ?? values.foreground.value;
 
   return (
     <Callout
@@ -122,13 +107,18 @@ export function ColourPickerDialog({
               </Text>
             </div>
             <div className={styles.callout__header__right}>
-              <IconButton
-                onClick={onDismiss}
-                iconProps={{
-                  iconName: "Cancel",
-                }}
-                ariaLabel="Close the Dialog"
-              ></IconButton>
+              <Tooltip
+                id="350f1fcb-b03d-484e-844c-1e4ccb566604"
+                description="Close the dialog"
+              >
+                <IconButton
+                  onClick={onDismiss}
+                  iconProps={{
+                    iconName: "Cancel",
+                  }}
+                  ariaLabel="Close the Dialog"
+                ></IconButton>
+              </Tooltip>
             </div>
           </header>
           <div className={styles.callout__body} data-testid={TEST_IDS.picker}>
@@ -144,6 +134,7 @@ export function ColourPickerDialog({
             <DefaultButton
               type="reset"
               data-testid="colour-picker-dialog-reset"
+              onClick={handleOnClickOnReset}
             >
               Reset
             </DefaultButton>

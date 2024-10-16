@@ -1,15 +1,6 @@
 /* eslint-disable no-case-declarations */
-import CoffeeColors from "coffee-colors";
 import { ratio, score } from "get-contrast";
-import { parseToHsl, parseToRgb } from "polished";
-import {
-  ColorFormat,
-  ColorType,
-  ColorValues,
-  NewColour,
-  PickerState,
-  Score,
-} from "./types";
+import { ColorType, ColorValues, NewColour, PickerState, Score } from "./types";
 
 export const CSS_NAME_SCHEMA = "--color-";
 
@@ -25,43 +16,15 @@ export function getColorValueofCSSVariable(type: ColorType = "foreground") {
 export function setColorValueAsCSSVariable(
   type: ColorType = "foreground",
   newValue: string
-) {
-  document.documentElement.style.setProperty(
-    `${CSS_NAME_SCHEMA}${type}`,
-    newValue
-  );
-}
+): Promise<string> {
+  const PROPERTY = `${CSS_NAME_SCHEMA}${type}`;
+  const PROPERTY_VALUE = newValue;
 
-export function convertColourToFormat(
-  previousFormat: ColorFormat,
-  format: ColorFormat,
-  value: string
-) {
-  switch (format) {
-    case "hex":
-      const newValue = new CoffeeColors(value);
-      const previousFormatWasRGBorHSL = !!(
-        previousFormat === "rgb" || previousFormat === "hsl"
-      );
+  return new Promise((resolve) => {
+    document.documentElement.style.setProperty(PROPERTY, PROPERTY_VALUE);
 
-      return previousFormatWasRGBorHSL
-        ? CoffeeColors.rgbToHex(newValue)
-        : value;
-
-    case "hsl":
-      const newHSL = parseToHsl(value);
-
-      return `hsl(${newHSL.hue},${(newHSL.saturation * 100).toFixed(0)}%,${(
-        newHSL.lightness * 100
-      ).toFixed(0)}%)`;
-
-    case "rgb":
-      const newRGB = parseToRgb(value);
-      return `rgb(${newRGB.red}, ${newRGB.green}, ${newRGB.blue})`;
-
-    default:
-      return value;
-  }
+    resolve(PROPERTY_VALUE);
+  });
 }
 
 export function setNewColour<GenericPayload>(
@@ -80,19 +43,6 @@ export function setNewColour<GenericPayload>(
       setColorValueAsCSSVariable("background", newValues.background.value);
 
       return newValues;
-
-    case "NEW_FORMAT":
-      const formatPayload: unknown = payload;
-      const payloadType = (formatPayload as NewColour).type;
-      const payloadValue = (formatPayload as NewColour).value;
-      const convertedColour = convertColourToFormat(
-        state.values[payloadType].format,
-        payloadValue as ColorFormat,
-        newValues[payloadType].value
-      );
-      newValues[payloadType].value = convertedColour;
-      newValues[payloadType].format = payloadValue as ColorFormat;
-      break;
 
     default:
     case "NEW_COLOUR":
@@ -151,17 +101,17 @@ export function setNewColourState<GenericPayload>(
 }
 
 export function swapColours(state: PickerState): PickerState {
-  const newBackground = state.values.foreground;
-  const newForeground = state.values.background;
+  const NEW_BACKGROUND = state.values.foreground;
+  const NEW_FOREGROUND = state.values.background;
 
-  setColorValueAsCSSVariable("background", newBackground.value);
-  setColorValueAsCSSVariable("foreground", newForeground.value);
+  setColorValueAsCSSVariable("background", NEW_BACKGROUND.value);
+  setColorValueAsCSSVariable("foreground", NEW_FOREGROUND.value);
 
   return {
     ...state,
     values: {
-      foreground: newForeground,
-      background: newBackground,
+      foreground: NEW_FOREGROUND,
+      background: NEW_BACKGROUND,
     },
   };
 }

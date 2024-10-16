@@ -1,6 +1,6 @@
 import { Icon } from "@fluentui/react/lib/Icon";
 import { FC, useMemo } from "react";
-import { Tooltip } from "../../../common";
+import { Tooltip } from "@/renderer/components";
 import styles from "./styles.module.scss";
 
 interface Props {

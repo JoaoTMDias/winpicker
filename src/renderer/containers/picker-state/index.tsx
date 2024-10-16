@@ -1,21 +1,14 @@
 /* eslint-disable no-case-declarations */
-import { createReducerContext } from "react-use";
+import { create } from "zustand";
 import {
-  getInitialStorage,
-  resetColorSwatches,
+  setColorValueAsCSSVariable,
   setNewColorSwatch,
-  setNewColourState,
   setNewRatio,
   setNewScore,
   swapColours,
 } from "./helpers";
-import {
-  ColorValues,
-  NewColour,
-  PickerState,
-  PickerStateAction,
-  Score,
-} from "./types";
+import { ColorValues, PickerState, Score, UsePickerState } from "./types";
+import { removeIndex, set as setValue } from "@feedzai/js-utilities";
 
 const INITIAL_COLOURS: ColorValues = {
   foreground: {
@@ -39,41 +32,78 @@ const INITIAL_STATE: PickerState = {
   ratio: INITIAL_RATIO,
   score: INITIAL_SCORE,
   values: INITIAL_COLOURS,
-  swatches: getInitialStorage(),
+  swatches: [],
 };
 
-const reducer = (
-  state: PickerState,
-  action: PickerStateAction
-): PickerState => {
-  switch (action.type) {
-    case "NEW_COLOUR":
-    case "NEW_FORMAT":
-      return setNewColourState<NewColour>(state, action.type, action.payload);
+export const usePicker = create<UsePickerState>((set) => {
+  return {
+    ...INITIAL_STATE,
+    createNewColour: async (colour) => {
+      const { type, value } = colour;
+      await setColorValueAsCSSVariable(type, value);
 
-    case "SWAP_COLOURS":
-      return swapColours(state);
+      return set((state) => {
+        const NEW_VALUES = setValue(
+          {
+            ...state.values,
+          },
+          `${type}.value`,
+          value
+        );
 
-    case "PICK_SWATCH":
-      return setNewColourState<ColorValues>(state, action.type, action.payload);
+        const NEW_RATIO = setNewRatio(
+          NEW_VALUES.foreground.value,
+          NEW_VALUES.background.value
+        );
+        const NEW_SCORE = setNewScore(
+          NEW_VALUES.foreground.value,
+          NEW_VALUES.background.value
+        );
 
-    case "RESET_FORM":
-      const newState = resetColorSwatches(INITIAL_STATE);
-      return {
-        ...newState,
-      };
+        return {
+          ...state,
+          values: NEW_VALUES,
+          ratio: NEW_RATIO,
+          score: NEW_SCORE,
+        };
+      });
+    },
+    pickSwatch: (swatch) =>
+      set((state) => {
+        const NEW_VALUES = {
+          ...swatch,
+        };
 
-    case "NEW_SWATCH":
-      return {
+        setColorValueAsCSSVariable("foreground", NEW_VALUES.foreground.value);
+        setColorValueAsCSSVariable("background", NEW_VALUES.background.value);
+
+        return {
+          ...state,
+          values: NEW_VALUES,
+        };
+      }),
+    swapColours: () => set(swapColours),
+    resetState: () =>
+      set((state) => {
+        const NEXT_STATE = {
+          ...state,
+          ...INITIAL_STATE,
+        };
+
+        setColorValueAsCSSVariable("foreground", "#fff");
+        setColorValueAsCSSVariable("background", "#000");
+
+        return NEXT_STATE;
+      }),
+    deleteSwatch: (index: number) =>
+      set((state) => ({
         ...state,
-        swatches: setNewColorSwatch(action.payload),
-      };
-    default:
-      return state;
-  }
-};
-
-export const [usePickerState, PickerStateProvider] = createReducerContext(
-  reducer,
-  INITIAL_STATE
-);
+        swatches: removeIndex(state.swatches, index),
+      })),
+    createNewSwatch: (colorValues) =>
+      set((state) => ({
+        ...state,
+        swatches: setNewColorSwatch(colorValues),
+      })),
+  };
+});

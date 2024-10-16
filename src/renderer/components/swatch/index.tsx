@@ -1,7 +1,7 @@
 import { Icon } from "@fluentui/react";
 import { CSSProperties, FC, useCallback } from "react";
-import { usePickerState } from "../../../containers/picker-state";
-import { Color, ColorValues } from "../../../containers/picker-state/types";
+import { usePicker } from "@/renderer/containers";
+import { Color, ColorValues } from "@/renderer/containers/picker-state/types";
 import styles from "./styles.module.scss";
 
 interface SwatchProps {
@@ -15,19 +15,17 @@ export const Swatch: FC<SwatchProps> = ({
   foreground,
   background,
 }) => {
-  const [state, dispatch] = usePickerState();
+  const { pickSwatch } = usePicker();
 
   const handleOnClickToPickSwatch = useCallback(() => {
-    if (!selected && state) {
-      dispatch({
-        type: "PICK_SWATCH",
-        payload: {
-          foreground,
-          background,
-        },
+    if (!selected) {
+      pickSwatch({
+        foreground,
+        background,
       });
     }
-  }, [selected, state, foreground, background, dispatch]);
+  }, [selected, foreground, background]);
+
   const description = `Swatch: Background = ${background.value}. Foreground = ${foreground.value}. Click/Tap to apply these colour values.`;
   return (
     <li data-selected={selected} className={styles.swatches__item}>
@@ -61,10 +59,7 @@ interface SwatchListProps {
   swatches: ColorValues[];
 }
 
-export const SwatchList: FC<SwatchListProps> = ({
-  current,
-  swatches,
-}) => {
+export const SwatchList: FC<SwatchListProps> = ({ current, swatches }) => {
   function renderSwatches() {
     const list = swatches.map((item, index) => {
       const key = `${item.foreground.value}-${index}`;
