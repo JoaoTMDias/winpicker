@@ -1,13 +1,13 @@
-@import './reset';
-@import './layout';
+@import "./reset";
+@import "./layout";
 
 :root {
   --color-background: black;
   --color-foreground: white;
-  --font-family: 'Segoe UI Variable Static Display', 'Segoe UI',
-    'Segoe UI Web (West European)', 'Segoe UI', -apple-system,
-    BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-    'Helvetica Neue', sans-serif;
+  --font-family: "Segoe UI Variable Static Display", "Segoe UI",
+    "Segoe UI Web (West European)", "Segoe UI", -apple-system,
+    BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
 }
 
 html,
@@ -17,4 +17,13 @@ body,
   color: var(--color-foreground);
   min-height: 100vh;
   font-family: var(--font-family);
+}
+
+#root {
+  width: 100%;
+
+  @media all and (min-width: 1440px) {
+    max-width: 90rem;
+    margin: 0 auto;
+  }
 }

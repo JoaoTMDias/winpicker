@@ -35,6 +35,10 @@
       opacity: 0.08;
     }
   }
+
+  &:focus-within {
+    outline: 1px solid var(--color-foreground);
+  }
 }
 
 .toggle {
@@ -48,6 +52,7 @@
   cursor: pointer;
   font-size: 1.25rem;
   letter-spacing: 1px;
+  outline: none;
 }
 
 .valueInput {
@@ -81,19 +86,6 @@
       border-right-color: transparent;
       border-bottom-color: var(--color-foreground);
     }
-  }
-}
-
-.preview {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  gap: 1rem;
-
-  &__icon {
-    margin-right: 1rem;
   }
 }
 
@@ -140,60 +132,5 @@
     color: var(--color-foreground);
     border-color: currentColor;
     outline-color: currentColor;
-  }
-}
-
-.callout {
-  padding: 2rem;
-  max-width: 28rem;
-
-  [role="dialog"] {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  &__body {
-    margin-block: 2rem;
-  }
-
-  &__header,
-  &__body,
-  &__footer {
-    display: flex;
-    width: 100%;
-  }
-
-  &__header,
-  &__footer {
-    flex-direction: row;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  &__footer {
-    justify-content: space-between;
-  }
-
-  &__header {
-    &__left {
-      height: 3rem;
-    }
-
-    &__right {
-      width: 3rem;
-      height: 3rem;
-      display: grid;
-      place-items: center;
-    }
-  }
-
-  &__body {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  &__picker {
-    max-width: 100%;
   }
 }

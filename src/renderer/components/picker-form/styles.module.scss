@@ -1,19 +1,25 @@
 .form {
-  margin-top: 2.5rem;
-  margin-right: 0;
-  margin-bottom: 5rem;
-  margin-left: 0;
-  gap: 2rem;
+  margin: 0 0 2.5rem 0;
+  gap: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
 
+  @media all and (min-width: 40rem) {
+    margin: 2.5rem 0 5rem 0;
+    gap: 2rem;
+  }
+
   &__footer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    @media all and (min-width: 40rem) {
+      flex-direction: row;
+    }
   }
 }
 
@@ -42,10 +48,11 @@
   align-items: center;
   background-color: transparent;
   color: var(--color-foreground);
-  height: 3rem;
+  height: 2rem;
   width: 100%;
 
   @media (min-width: 40rem) {
+    height: 3rem;
     transform: translateY(30px);
     width: fit-content;
   }
@@ -79,12 +86,15 @@
   transition: transform 100ms ease-in-out;
   outline-color: var(--color-foreground);
 
-  &:hover,
+  &:active,
   &:focus {
-    transform: scale(0.9);
     outline-width: 2px;
     outline-style: solid;
     outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.9);
   }
 
   &--default {

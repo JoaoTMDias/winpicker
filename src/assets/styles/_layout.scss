@@ -9,7 +9,11 @@
     padding: 1rem;
     min-height: 100vh;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
+
+    @media all and (min-width: 40rem) {
+      gap: 2rem;
+    }
   }
 }
 

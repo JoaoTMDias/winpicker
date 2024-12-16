@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@feedzai/js-utilities": "^1.5.0",
-    "@fluentui/react": "^8.121.2",
+    "@fluentui/react": "^8.121.4",
     "@tauri-apps/api": "^1.6.0",
     "clsx": "^2.1.1",
     "coffee-colors": "^1.0.1",
@@ -24,23 +24,26 @@
     "polished": "^4.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2",
+    "react-router-dom": "^6.27.0",
     "react-use": "^17.5.1",
-    "use-eye-dropper": "^1.6.4"
+    "use-eye-dropper": "^1.6.4",
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
-    "@playwright/test": "^1.47.2",
-    "@tauri-apps/cli": "^2.0.1",
+    "@playwright/test": "^1.48.0",
+    "@tauri-apps/cli": "^2.0.3",
     "@types/node": "^20.14.2",
     "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.2",
     "cross-env": "^7.0.3",
+    "playwright-core": "^1.48.0",
     "rimraf": "^6.0.1",
-    "sass": "^1.79.4",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.8",
+    "sass": "^1.79.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9",
+    "vite-tsconfig-paths": "^5.0.1",
     "wait-on": "^8.0.1"
   }
 }

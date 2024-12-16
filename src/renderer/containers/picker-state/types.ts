@@ -37,3 +37,12 @@ export type PickerStateAction =
       type: "DELETE_SWATCH";
       payload: number;
     };
+
+export interface UsePickerState extends PickerState {
+  createNewColour: (colour: NewColour) => void;
+  pickSwatch: (swatch: ColorValues) => void;
+  resetState: VoidFunction;
+  swapColours: VoidFunction;
+  deleteSwatch: (index: number) => void;
+  createNewSwatch: (payload: ColorValues) => void;
+}

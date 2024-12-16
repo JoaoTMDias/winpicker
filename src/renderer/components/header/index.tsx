@@ -1,14 +1,12 @@
 import { useMemo } from "react";
-import { usePickerState } from "../../containers/picker-state";
+import { usePicker } from "@/renderer/containers";
 import Grade from "./grades/grade";
 import Score from "./score";
 import styles from "./styles.module.scss";
 
 function Header() {
-  const [state] = usePickerState();
+  const { ratio } = usePicker();
   const compliance = useMemo(() => {
-    const { ratio } = state;
-
     switch (true) {
       case ratio > 7:
         return { "AA+": true, AA: true, "AAA+": true, AAA: true };
@@ -22,11 +20,11 @@ function Header() {
       default:
         return { "AA+": false, AA: false, "AAA+": false, AAA: false };
     }
-  }, [state]);
+  }, [ratio]);
 
   return (
     <header className={styles.wrapper} aria-label="Score and Grade results">
-      <Score score={state.ratio} />
+      <Score score={ratio} />
       <h2 className="sr-only" data-testid="header-grade-results-title">
         Grade Results
       </h2>

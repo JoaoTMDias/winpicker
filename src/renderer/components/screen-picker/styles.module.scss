@@ -1,0 +1,12 @@
+.preview {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 1rem;
+
+  &__icon {
+    margin-right: 1rem;
+  }
+}

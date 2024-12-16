@@ -1,4 +1,4 @@
-import { useId } from "@fluentui/react-hooks";
+import { useAutoId } from "@feedzai/js-utilities/hooks";
 import {
   ITooltipHostProps,
   ITooltipHostStyles,
@@ -17,7 +17,7 @@ interface Props extends ITooltipHostProps {
 }
 
 const Tooltip: FC<Props> = ({ id, description, delay, children }) => {
-  const tooltipId = useId(id);
+  const tooltipId = useAutoId(id);
 
   return (
     <TooltipHost

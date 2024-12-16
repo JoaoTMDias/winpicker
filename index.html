@@ -7,6 +7,11 @@
     <meta name="view-transition" content="same-origin" />
     <title>WinPicker</title>
     <style>
+      :root {
+        --color-background: #000000;
+        --color-foreground: #ffffff;
+      }
+
       html,
       body {
         height: 100%;
@@ -22,6 +27,23 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
+      .loading {
+        display: grid;
+        place-items: center;
+        inset: 0;
+        margin: 0 auto;
+        position: fixed;
+      }
+
+      .loading__letters {
+        display: flex;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 68px;
+        line-height: 92px;
+        color: var(--color-foreground);
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -29,6 +51,11 @@
   </head>
   <body>
     <div id="root">
+      <div class="loading">
+        <span class="loading__letters">
+          Aa
+        </span>
+      </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
