@@ -5,7 +5,6 @@ import styles from "./app.module.scss";
 import "./assets/styles/index.scss";
 import Header from "./renderer/components/header";
 import PickerForm from "./renderer/components/picker-form";
-import { TextPreview } from "./renderer/components/text-preview";
 
 initializeIcons();
 
@@ -17,7 +16,6 @@ const WinPicker = () => {
         <Header />
         <main>
           <PickerForm />
-          <TextPreview />
         </main>
         <footer
           aria-label="Feedback and Help"

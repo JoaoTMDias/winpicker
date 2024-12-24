@@ -1,24 +1,30 @@
 import { ColourPickerDialogProps } from "@/renderer/components/picker-form/colour/types";
 import {
-  Callout,
+  Panel,
   ColorPicker,
   DefaultButton,
-  FocusTrapZone,
   IColor,
-  IconButton,
   PrimaryButton,
   Text,
   getColorFromString,
+  PanelType,
 } from "@fluentui/react";
-import { ScreenPicker } from "@/renderer/components";
+import { ScreenPicker, TextPreview } from "@/renderer/components";
 import styles from "./styles.module.scss";
-import { useCallback, useRef } from "react";
-import { Tooltip } from "../common";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePicker } from "@/renderer/containers";
-import { useLockBodyScroll } from "react-use";
+import Grade from "../header/grades/grade";
+import { getComplianceState } from "@/renderer/helpers";
+import {
+  getColorRating,
+  getColorRatio,
+} from "@/renderer/containers/picker-state/helpers";
 
 const callout = `colour-picker-dialog`;
 
+/**
+ * Colour picker dialog
+ */
 export function ColourPickerDialog({
   open,
   target,
@@ -26,127 +32,193 @@ export function ColourPickerDialog({
   id,
   label,
 }: ColourPickerDialogProps) {
-  useLockBodyScroll(open);
-
-  const { values, createNewColour, resetState } = usePicker();
-  const TOOLTIP_PROPS = {
-    id: `a05383f4-3cc3-4788-9ca5-9340c754818d-${id}`,
-    title: `${label} colour`,
-  };
-
-  const { current: TEST_IDS } = useRef({
+  const TEST_IDS = useRef({
     callout,
     title: `${callout}-title`,
     description: `${callout}-description`,
     picker: `${callout}-picker`,
-  });
+  }).current;
 
-  const handleOnPickColorFromSystem = useCallback(
-    (newColour: string) => {
-      createNewColour({
-        type: id,
-        value: newColour,
-      });
-    },
-    [id]
-  );
+  const { values, createNewColour, resetState } = usePicker();
+  const targetColour = values[id]?.value ?? "#ffffff";
+  const [currentColor, setCurrentColor] = useState(targetColour);
+  const [currentRatio, setCurrentRatio] = useState(0);
 
-  const handleOnClickOnReset = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      event.preventDefault();
+  useEffect(() => {
+    const colors = {
+      foreground:
+        id === "foreground"
+          ? currentColor
+          : values.foreground?.value ?? "#000000",
+      background:
+        id === "background"
+          ? currentColor
+          : values.background?.value ?? "#ffffff",
+    };
+    const nextRatio = getColorRatio(colors.foreground, colors.background);
 
-      resetState();
+    setCurrentRatio(nextRatio);
+  }, [currentColor, id, values]);
+
+  const TOOLTIP_PROPS = {
+    id: `${crypto.randomUUID()}-${id}`,
+    title: `${label} colour`,
+  };
+
+  /**
+   * Calculates the compliance state of the current ratio
+   *
+   */
+  const compliance = useMemo(() => {
+    return getComplianceState(currentRatio);
+  }, [currentRatio]);
+
+  /**
+   * Calculates the rating of the current ratio
+   */
+  const rating = useMemo(() => {
+    return getColorRating(currentRatio);
+  }, [currentRatio]);
+
+  /**
+   * Handles the colour picker change event
+   */
+  const handleOnPickColor = useCallback(
+    (_: React.SyntheticEvent<HTMLElement>, color: IColor) => {
+      setCurrentColor(color.str);
     },
     []
   );
 
-  const handleOnPickColor = useCallback(
-    (_: React.SyntheticEvent<HTMLElement, Event>, color: IColor) => {
-      const NEW_COLOUR = color.str;
-
-      createNewColour({
-        type: id,
-        value: NEW_COLOUR,
-      });
+  /**
+   * Handles the colour picker change event from the system
+   */
+  const handleOnPickColorFromSystem = useCallback(
+    (color: string) => {
+      setCurrentColor(color);
     },
-    [id]
+    [setCurrentColor]
   );
 
-  if (!open) {
-    return null;
-  }
+  /**
+   * Handles the reset button click event
+   */
+  const handleOnClickOnReset = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      setCurrentColor(targetColour);
+      resetState();
+    },
+    [resetState, targetColour]
+  );
 
-  const CURRENT_COLOUR =
-    getColorFromString(values.foreground.value) ?? values.foreground.value;
+  /**
+   * Handles the submit button click event
+   */
+  const handleOnSubmit = useCallback(() => {
+    createNewColour({ type: id, value: currentColor });
+    onDismiss?.();
+  }, [createNewColour, currentColor, id, onDismiss]);
+
+  const onRenderFooterContent = useCallback(
+    () => (
+      <div className={styles.callout__footer}>
+        <DefaultButton
+          type="reset"
+          data-testid="colour-picker-dialog-reset"
+          onClick={handleOnClickOnReset}
+        >
+          Reset
+        </DefaultButton>
+        <PrimaryButton
+          type="button"
+          onClick={handleOnSubmit}
+          data-testid="colour-picker-dialog-save"
+        >
+          {`Set new ${label} colour`}
+        </PrimaryButton>
+      </div>
+    ),
+    [handleOnClickOnReset]
+  );
+
+  const PICKER_COLOUR = getColorFromString(currentColor) ?? currentColor;
 
   return (
-    <Callout
+    <Panel
       className={styles.callout}
-      role="dialog"
-      gapSpace={8}
-      target={`#${target}`}
+      closeButtonAriaLabel="Close"
+      headerText={TOOLTIP_PROPS.title}
+      isFooterAtBottom={true}
+      isLightDismiss
+      isOpen={open}
       onDismiss={onDismiss}
-      setInitialFocus
+      onRenderFooterContent={onRenderFooterContent}
+      type={PanelType.medium}
       data-testid={TEST_IDS.callout}
     >
-      <form onSubmit={(e) => e.preventDefault()}>
-        <FocusTrapZone>
-          <header className={styles.callout__header}>
-            <div className={styles.callout__header__left}>
-              <Text
-                as="h1"
-                block
-                variant="xLarge"
-                className={styles.title}
-                data-testid={TEST_IDS.title}
-              >
-                {TOOLTIP_PROPS.title}
-              </Text>
-              <Text block variant="small" data-testid={TEST_IDS.description}>
-                Choose a colour from your screen or use the picker below
-              </Text>
+      <form onSubmit={(event) => event.preventDefault()}>
+        <header className={styles.callout__header}>
+          <div className={styles.callout__header__left}>
+            <Text block variant="small" data-testid={TEST_IDS.description}>
+              Choose a colour from your screen or use the picker below
+            </Text>
+          </div>
+        </header>
+        <div className={styles.callout__body} data-testid={TEST_IDS.picker}>
+          <div className={styles.callout__score}>
+            <h2 className={styles.callout__ratio}>
+              <span className={styles.callout__ratio__label}>Ratio: </span>
+              <span className={styles.callout__ratio__value}>
+                {currentRatio}
+              </span>
+            </h2>
+            <div className={styles.callout__rating}>{rating}</div>
+            <div
+              role="list"
+              className={styles.callout__grade}
+              data-testid="panel-grade-results-list"
+            >
+              <Grade
+                compliant={compliance.AA}
+                level="AA"
+                data-testid="header-grade-results-item-aa"
+              />
+              <Grade
+                compliant={compliance["AA+"]}
+                level="AA+"
+                data-testid="header-grade-results-item-aa-plus"
+              />
+              <Grade
+                compliant={compliance.AAA}
+                level="AAA"
+                data-testid="header-grade-results-item-aaa"
+              />
+              <Grade
+                compliant={compliance["AAA+"]}
+                level="AAA+"
+                data-testid="header-grade-results-item-aaa-plus"
+              />
             </div>
-            <div className={styles.callout__header__right}>
-              <Tooltip
-                id="350f1fcb-b03d-484e-844c-1e4ccb566604"
-                description="Close the dialog"
-              >
-                <IconButton
-                  onClick={onDismiss}
-                  iconProps={{
-                    iconName: "Cancel",
-                  }}
-                  ariaLabel="Close the Dialog"
-                ></IconButton>
-              </Tooltip>
-            </div>
-          </header>
-          <div className={styles.callout__body} data-testid={TEST_IDS.picker}>
-            <ScreenPicker type={id} onSelect={handleOnPickColorFromSystem} />
+          </div>
+          <div className="picker">
             <ColorPicker
-              color={CURRENT_COLOUR}
+              color={(PICKER_COLOUR as IColor).str}
               alphaType="none"
               onChange={handleOnPickColor}
               className={styles.callout__picker}
             />
+            <ScreenPicker type={id} onSelect={handleOnPickColorFromSystem} />
           </div>
-          <footer className={styles.callout__footer}>
-            <DefaultButton
-              type="reset"
-              data-testid="colour-picker-dialog-reset"
-              onClick={handleOnClickOnReset}
-            >
-              Reset
-            </DefaultButton>
-            <PrimaryButton
-              type="submit"
-              data-testid="colour-picker-dialog-save"
-            >
-              Set new colour
-            </PrimaryButton>
-          </footer>
-        </FocusTrapZone>
+          <div className="preview">
+            <TextPreview
+              style={{
+                [`--color-${id}`]: currentColor,
+              }}
+            />
+          </div>
+        </div>
       </form>
-    </Callout>
+    </Panel>
   );
 }

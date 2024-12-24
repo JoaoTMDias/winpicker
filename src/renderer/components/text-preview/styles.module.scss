@@ -1,8 +1,11 @@
 .details,
 .content {
+  padding: 1rem;
   gap: 1rem;
   margin: 0 auto;
   max-width: 90vw;
+  background: var(--color-background);
+  border-radius: 0.25rem;
 
   @media all and (min-width: 40rem) {
     max-width: 80vw;
@@ -58,6 +61,7 @@
 
 .title,
 .subtitle,
+.small,
 .term {
   color: var(--color-foreground);
 }
@@ -70,6 +74,10 @@
 .subtitle {
   font-size: clamp(1.25rem, 2vh, 2rem);
   font-weight: 600;
+}
+
+.small {
+  font-size: clamp(0.875rem, 87.5%, 1rem);
 }
 
 .term {

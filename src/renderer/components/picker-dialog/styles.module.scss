@@ -1,6 +1,5 @@
 .callout {
   padding: 2rem;
-  max-width: 28rem;
 
   [role="dialog"] {
     display: flex;
@@ -9,46 +8,81 @@
   }
 
   &__body {
-    margin-block: 2rem;
+    margin-block: 1rem;
   }
 
   &__header,
   &__body,
   &__footer {
-    display: flex;
     width: 100%;
   }
 
   &__header,
   &__footer {
-    flex-direction: row;
+    display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   &__footer {
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+
+    @media all and (min-width: 60rem) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   &__header {
-    &__left {
-      height: 3rem;
-    }
+    flex-direction: row;
 
-    &__right {
-      width: 3rem;
-      height: 3rem;
-      display: grid;
-      place-items: center;
+    &__left {
+      height: 1rem;
     }
   }
 
   &__body {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 5rem 1fr auto;
     gap: 1rem;
   }
 
   &__picker {
     max-width: 100%;
+  }
+
+  &__ratio {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+
+    &__label {
+      font-weight: 400;
+    }
+  }
+
+  &__grade {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  :global(.ms-ColorPicker-panel) {
+    padding: 0;
+  }
+
+  :global(.ms-ColorPicker-slider) {
+    border-radius: 1.25rem;
+  }
+
+  [role="slider"],
+  :global(.ms-ColorPicker-light),
+  :global(.ms-ColorPicker-dark) {
+    border-radius: 0.5rem;
   }
 }

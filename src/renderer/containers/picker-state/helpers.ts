@@ -27,6 +27,9 @@ export function setColorValueAsCSSVariable(
   });
 }
 
+/**
+ * Sets the new colour value and returns the new colour values
+ */
 export function setNewColour<GenericPayload>(
   state: PickerState,
   type: "NEW_COLOUR" | "NEW_FORMAT" | "PICK_SWATCH",
@@ -61,21 +64,37 @@ export function setNewColour<GenericPayload>(
 
   return newValues;
 }
-
-export function setNewRatio(foreground: string, background: string): number {
+/**
+ * Returns the colour contrast ratio
+ */
+export function getColorRatio(foreground: string, background: string): number {
   return ratio(foreground, background).toFixed(2);
 }
 
+const RATINGS: [number, number][] = [
+  [13, 5],
+  [7, 4],
+  [4.5, 3],
+  [3, 2],
+  [1, 1],
+];
+
+/**
+ * Returns the rating of the colour contrast ratio
+ */
+export function getColorRating(ratio: number): number {
+  return RATINGS.find(([threshold]) => ratio >= threshold)?.[1] ?? 1;
+}
+
+/**
+ * Returns the score of the colour contrast ratio and the rating
+ */
 export function setNewScore(foreground: string, background: string): Score {
   return score(foreground, background);
 }
 
 /**
- *
- * @param {PickerState} state
- * @param {"NEW_COLOUR" | "NEW_FORMAT"} type
- * @param {NewColour} payload
- * @returns {PickerState}
+ * Sets the new colour state and returns the new state values with the new ratio and score
  */
 export function setNewColourState<GenericPayload>(
   state: PickerState,
@@ -83,7 +102,7 @@ export function setNewColourState<GenericPayload>(
   payload: GenericPayload
 ): PickerState {
   const newValues = setNewColour(state, type, payload);
-  const newRatio = setNewRatio(
+  const newRatio = getColorRatio(
     newValues.foreground.value,
     newValues.background.value
   );
@@ -100,6 +119,10 @@ export function setNewColourState<GenericPayload>(
   };
 }
 
+/**
+ * Returns the compliance state of the colour contrast ratio based on the WCAG
+ * 2.0 guidelines for AA and AAA ratings for normal and large text
+ */
 export function swapColours(state: PickerState): PickerState {
   const NEW_BACKGROUND = state.values.foreground;
   const NEW_FOREGROUND = state.values.background;
@@ -116,6 +139,9 @@ export function swapColours(state: PickerState): PickerState {
   };
 }
 
+/**
+ * Returns the initial storage of the colour swatches
+ */
 export function getInitialStorage() {
   let swatches: ColorValues[] = [];
 
@@ -137,6 +163,9 @@ export function getInitialStorage() {
   return swatches;
 }
 
+/**
+ * Sets the new colour swatch and returns the new swatches
+ */
 export function setNewColorSwatch(payload: ColorValues): ColorValues[] {
   let swatches: ColorValues[] = [];
 
@@ -162,6 +191,9 @@ export function setNewColorSwatch(payload: ColorValues): ColorValues[] {
   return swatches;
 }
 
+/**
+ * Resets the colour swatches and returns the new state
+ */
 export function resetColorSwatches(state: PickerState): PickerState {
   setColorValueAsCSSVariable("background", state.values.background.value);
   setColorValueAsCSSVariable("foreground", state.values.foreground.value);

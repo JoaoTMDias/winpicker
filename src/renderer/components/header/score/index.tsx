@@ -4,6 +4,7 @@ import { usePicker } from "@/renderer/containers";
 import { Tooltip } from "@/renderer/components";
 import { getRatioAsString } from "@/renderer/helpers";
 import styles from "./styles.module.scss";
+import { getColorRating } from "@/renderer/containers/picker-state/helpers";
 
 interface Props {
   score: number;
@@ -16,23 +17,7 @@ const Score: FC<Props> = ({ score }) => {
   const description = `Contrast Ratio is ${score} to 1`;
 
   const rating = useMemo(() => {
-    switch (true) {
-      case ratio >= 13:
-        return 5;
-
-      case ratio >= 7:
-        return 4;
-
-      case ratio >= 4.5:
-        return 3;
-
-      case ratio >= 3:
-        return 2;
-
-      default:
-      case ratio >= 1:
-        return 1;
-    }
+    return getColorRating(ratio);
   }, [ratio]);
 
   const RATING_LABEL = `Colour combination has a rating of ${rating} out of ${MAX_RATING_SCORE} stars`;

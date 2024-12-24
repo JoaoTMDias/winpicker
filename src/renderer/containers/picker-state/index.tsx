@@ -3,7 +3,7 @@ import { create } from "zustand";
 import {
   setColorValueAsCSSVariable,
   setNewColorSwatch,
-  setNewRatio,
+  getColorRatio,
   setNewScore,
   swapColours,
 } from "./helpers";
@@ -20,7 +20,7 @@ const INITIAL_COLOURS: ColorValues = {
     format: "hex",
   },
 };
-const INITIAL_RATIO: number = setNewRatio(
+const INITIAL_RATIO: number = getColorRatio(
   INITIAL_COLOURS.foreground.value,
   INITIAL_COLOURS.background.value
 );
@@ -51,7 +51,7 @@ export const usePicker = create<UsePickerState>((set) => {
           value
         );
 
-        const NEW_RATIO = setNewRatio(
+        const NEW_RATIO = getColorRatio(
           NEW_VALUES.foreground.value,
           NEW_VALUES.background.value
         );

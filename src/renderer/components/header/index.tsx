@@ -3,23 +3,12 @@ import { usePicker } from "@/renderer/containers";
 import Grade from "./grades/grade";
 import Score from "./score";
 import styles from "./styles.module.scss";
+import { getComplianceState } from "@/renderer/helpers";
 
 function Header() {
   const { ratio } = usePicker();
   const compliance = useMemo(() => {
-    switch (true) {
-      case ratio > 7:
-        return { "AA+": true, AA: true, "AAA+": true, AAA: true };
-
-      case ratio > 4.5:
-        return { "AA+": true, AA: true, "AAA+": true, AAA: false };
-
-      case ratio > 3:
-        return { "AA+": true, AA: false, "AAA+": false, AAA: false };
-
-      default:
-        return { "AA+": false, AA: false, "AAA+": false, AAA: false };
-    }
+    return getComplianceState(ratio);
   }, [ratio]);
 
   return (
