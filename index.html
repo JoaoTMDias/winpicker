@@ -42,10 +42,32 @@
         font-size: 68px;
         line-height: 92px;
         color: var(--color-foreground);
+        animation-name: pulse;
+        animation-duration: 3000ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 300ms;
+        animation-iteration-count: infinite;;
       }
 
       * {
         box-sizing: border-box;
+      }
+
+      @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.5
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
       }
     </style>
   </head>
